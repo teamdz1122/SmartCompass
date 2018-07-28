@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import smartcompass.teamdz.com.smartcompass2018.ui.compass.CompassActivity;
+import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnMaps;
     private Button mBtnCompass;

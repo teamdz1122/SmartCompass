@@ -1,4 +1,4 @@
-package smartcompass.teamdz.com.smartcompass2018;
+package smartcompass.teamdz.com.smartcompass2018.ui.maps;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -32,6 +32,8 @@ import java.util.List;
 import Modules.DirectionFinder;
 import Modules.DirectionFinderListener;
 import Modules.Route;
+import smartcompass.teamdz.com.smartcompass2018.R;
+
 /**
  * Created by dzteam on 7/17/2018.
  */

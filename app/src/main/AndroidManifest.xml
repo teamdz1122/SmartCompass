@@ -34,9 +34,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapsActivity">
+        <activity android:name=".ui.maps.MapsActivity">
         </activity>
-        <activity android:name=".CompassActivity"/>
+        <activity android:name=".ui.compass.CompassActivity"/>
     </application>
 
 </manifest>
