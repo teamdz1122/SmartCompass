@@ -1,4 +1,4 @@
-package smartcompass.teamdz.com.smartcompass2018.sensor;
+package smartcompass.teamdz.com.smartcompass2018.data.sensor;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;

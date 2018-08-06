@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmartCompass2018</string>
+    <string name="no_gps_no_network">Device hasn\'t gps and network</string>
 </resources>

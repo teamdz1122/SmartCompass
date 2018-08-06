@@ -5,18 +5,18 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import smartcompass.teamdz.com.smartcompass2018.R;
-import smartcompass.teamdz.com.smartcompass2018.sensor.CompassSensorManager;
+import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
+import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
-public class CompassFragment extends Fragment implements SensorEventListener{
+public class CompassFragment extends BaseFragment<CompassPresenter> implements SensorEventListener, CompassView{
 
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
@@ -27,12 +27,15 @@ public class CompassFragment extends Fragment implements SensorEventListener{
     private float mAzimuth;
 
     public CompassFragment() {
-
-
     }
 
     public static CompassFragment newInstance() {
         return new CompassFragment();
+    }
+
+    @Override
+    protected CompassPresenter createPresenter() {
+        return new CompassPresenter(this);
     }
 
     @Override
@@ -67,6 +70,18 @@ public class CompassFragment extends Fragment implements SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        mPresenter.changeDirection(sensorEvent);
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
+
+    @Override
+    public void setChangeDirection(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mAccelValues = CompassUtils.lowPass(sensorEvent.values, mAccelValues);
             mCompassSensorManager.setGravity(mAccelValues);
@@ -86,12 +101,7 @@ public class CompassFragment extends Fragment implements SensorEventListener{
                     mAzimuth, mDirectUnitLeft, mDirectText, mDirectUnitRight);*/
             mDirectionImage.setDegress(-mAzimuth);
             mDirectionImage.invalidate();
-            mTvDegrees.setText(String.valueOf(mAzimuth));
+            mTvDegrees.setText(String.valueOf(Math.round(mAzimuth)));
         }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 }
