@@ -12,6 +12,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -34,6 +36,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.google.android.gms:play-services:12.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.2'
-    compile 'com.google.android.gms:play-services:8.4.0'
 }

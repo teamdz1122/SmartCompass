@@ -85,27 +85,27 @@
         android:text="Ha Noi"
         android:textColor="@color/color_text_compass"
         android:textSize="@dimen/text_title_city_h5"
-        app:layout_constraintBottom_toTopOf="@+id/tv_latidute"
+        app:layout_constraintBottom_toTopOf="@+id/tv_latitude"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_compass"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/tv_latidute"
+        android:id="@+id/tv_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="32.05"
         android:textColor="@color/color_text_compass"
         android:textSize="@dimen/text_longitude_and_latitude_h4"
-        app:layout_constraintBaseline_toBaselineOf="@+id/tv_longidute"
-        app:layout_constraintEnd_toStartOf="@+id/tv_longidute"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_longitude"
+        app:layout_constraintEnd_toStartOf="@+id/tv_longitude"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_longidute"
+        android:id="@+id/tv_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -118,7 +118,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_latidute"
+        app:layout_constraintStart_toEndOf="@+id/tv_latitude"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
         app:layout_constraintVertical_bias="0.100000024" />
 </android.support.constraint.ConstraintLayout>

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">SmartCompass2018</string>
     <string name="no_gps_no_network">Device hasn\'t gps and network</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid lat long used</string>
+    <string name="no_address_found">No address found</string>
+    <string name="address_found">Address found</string>
 </resources>
