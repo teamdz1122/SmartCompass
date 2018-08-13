@@ -49,11 +49,7 @@ public class CompassUtils {
         String degree, minute, second;
 
         int intPart = (int) coordinator;
-        if (Math.abs(intPart) <100) {
-            degree = "0" + intPart;
-        } else {
-            degree = String.valueOf(intPart);
-        }
+        degree = String.valueOf(intPart);
 
         double mod = coordinator % 1;
         coordinator = mod * 60;
