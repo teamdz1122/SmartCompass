@@ -1,35 +1,28 @@
-package smartcompass.teamdz.com.smartcompass2018.data.location;
+package smartcompass.teamdz.com.smartcompass2018.service.location;
 
-import android.annotation.SuppressLint;
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
 
-public class CompassLocation extends IntentService {
-    private static final String TAG = CompassLocation.class.getSimpleName();
+public class CompassLocationService extends IntentService {
+    private static final String TAG = CompassLocationService.class.getSimpleName();
     private Location mLocation;
     private ResultReceiver mReceiver;
 
-    public CompassLocation() {
+    public CompassLocationService() {
         super(TAG);
 
     }
@@ -62,7 +55,6 @@ public class CompassLocation extends IntentService {
                     "Latitude = " + mLocation.getLatitude() +
                     ", Longitude = " +
                     mLocation.getLongitude(), illegalArgumentException);
-
         }
 
         if (addresses == null || addresses.size() == 0) {

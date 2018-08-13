@@ -4,4 +4,5 @@ import android.hardware.SensorEvent;
 
 public interface CompassView {
     void setChangeDirection(SensorEvent sensorEvent);
+    void setLocationText(double lat, double lon);
 }

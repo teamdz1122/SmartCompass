@@ -13,4 +13,8 @@ public class CompassPresenter extends BasePresenter<CompassView> {
     public void changeDirection(SensorEvent sensorEvent) {
         mView.setChangeDirection(sensorEvent);
     }
+
+    public void setLocationText(double latitude, double longitude) {
+        mView.setLocationText(latitude, longitude);
+    }
 }

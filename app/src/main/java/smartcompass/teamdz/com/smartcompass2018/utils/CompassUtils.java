@@ -44,4 +44,44 @@ public class CompassUtils {
         }
         return output;
     }
+
+    public static String decimalToDMS(double coordinator) {
+        String degree, minute, second;
+
+        int intPart = (int) coordinator;
+        if (Math.abs(intPart) <100) {
+            degree = "0" + intPart;
+        } else {
+            degree = String.valueOf(intPart);
+        }
+
+        double mod = coordinator % 1;
+        coordinator = mod * 60;
+        intPart = (int) coordinator;
+        if (Math.abs(intPart) <10) {
+            minute = "0" + intPart;
+        } else {
+            minute = String.valueOf(intPart);
+        }
+
+        mod = coordinator % 1;
+        coordinator = mod * 60;
+        intPart = (int) coordinator;
+        if (Math.abs(intPart) <10) {
+            second = "0" + intPart;
+        } else {
+            second = String.valueOf(intPart);
+        }
+
+        return degree + "\u00b0" + minute + "'" + second + "\"";
+    }
+
+    public static String getLatSymbol(double coordinator, boolean isLat) {
+        if (isLat) {
+            return coordinator < 0.0d ? "S" : "N";
+        } else {
+            return coordinator < 0.0d ? "W" : "E";
+        }
+    }
+
 }

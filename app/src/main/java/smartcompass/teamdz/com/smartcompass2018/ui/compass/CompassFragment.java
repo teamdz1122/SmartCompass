@@ -10,7 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,20 +18,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
-import smartcompass.teamdz.com.smartcompass2018.data.location.CompassLocation;
+import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
@@ -108,8 +103,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    mTvLat.setText(String.valueOf(location.getLatitude()));
-                    mTvLon.setText(String.valueOf(location.getLongitude()));
+                    mPresenter.setLocationText(location.getLatitude(), location.getLongitude());
                     mLastLocation = location;
                     getAddress();
                 }
@@ -122,15 +116,13 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
 
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
-        Log.d("nghia", "getLastLocation");
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
                             mLastLocation = location;
-                            mTvLat.setText(String.valueOf(location.getLatitude()));
-                            mTvLon.setText(String.valueOf(location.getLongitude()));
+                            mPresenter.setLocationText(location.getLatitude(), location.getLongitude());
                             getAddress();
                         } else {
                             Log.d("nghia", "null");
@@ -150,7 +142,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     }
 
     protected void startIntentService() {
-        Intent intent = new Intent(getActivity(), CompassLocation.class);
+        Intent intent = new Intent(getActivity(), CompassLocationService.class);
         intent.putExtra(Constants.RECEIVER, mResultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
         getActivity().startService(intent);
@@ -214,8 +206,16 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                     mAzimuth, mDirectUnitLeft, mDirectText, mDirectUnitRight);*/
             mDirectionImage.setDegress(-mAzimuth);
             mDirectionImage.invalidate();
-            mTvDegrees.setText(String.valueOf(Math.round(mAzimuth)));
+            mTvDegrees.setText(String.valueOf(Math.round(mAzimuth)) + "\u00b0");
         }
+    }
+
+    @Override
+    public void setLocationText(double lat, double lon) {
+        String latitude = CompassUtils.decimalToDMS(lat) + CompassUtils.getLatSymbol(lat, true);
+        String longitude = CompassUtils.decimalToDMS(lon) + CompassUtils.getLatSymbol(lon, false);
+        mTvLat.setText(latitude);
+        mTvLon.setText(longitude);
     }
 
     class AddressResultReceiver extends ResultReceiver {
@@ -243,7 +243,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         }
     }
 
-    private void displayAddressOutput(String currentAdd) {
-        mTvCity.setText(currentAdd);
+    private void displayAddressOutput(String currentAddress) {
+        mTvCity.setText(currentAddress);
     }
 }
