@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import smartcompass.teamdz.com.smartcompass2018.ui.compass.CompassActivity;
+import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapActivityExample;
 import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_maps:
-                Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+                Intent intent = new Intent(MainActivity.this,MapActivityExample.class);
                 startActivity(intent);
                 break;
             case R.id.btn_compass:

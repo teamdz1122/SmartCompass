@@ -45,6 +45,28 @@ public class CompassUtils {
         return output;
     }
 
+    public static String displayCurrentDirection(float azimuth){
+        String direct = "";
+        if (azimuth <= 22.5 || azimuth >= 337.5) {
+            direct += "N";
+        } else if (azimuth > 22.5 && azimuth < 67.5) {
+            direct += "NE";
+        } else if (azimuth >= 67.5 && azimuth <= 112.5) {
+            direct += "E";
+        } else if (azimuth > 112.5 && azimuth < 157.5) {
+            direct += "SE";
+        } else if (azimuth >= 157.5 && azimuth <= 202.5) {
+            direct += "S";
+        } else if (azimuth > 202.5 && azimuth < 247.5) {
+            direct += "SW";
+        } else if (azimuth >= 247.5 && azimuth <= 292.5) {
+            direct += "W";
+        } else if (azimuth > 292.5 && azimuth < 337.5) {
+            direct += "NW";
+        }
+        return direct;
+    }
+
     public static String decimalToDMS(double coordinator) {
         String degree, minute, second;
 

@@ -37,10 +37,9 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
 
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
-    private TextView mTvDegrees, mTvLat, mTvLon, mTvCity;
+    private TextView mTvDegrees, mTvLat, mTvLon, mTvCity, mTvDirection;
     private float mMagnetic;
     private float[] mAccelValues = new float[]{0f, 0f, 9.8f};
-    ;
     private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
     private float mAzimuth;
     //private CompassLocation mCompassLocation;
@@ -95,6 +94,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         mTvLat = view.findViewById(R.id.tv_latitude);
         mTvLon = view.findViewById(R.id.tv_longitude);
         mTvCity = view.findViewById(R.id.tv_location_city);
+        mTvDirection = view.findViewById(R.id.tv_direction);
         getLastLocation();
         mLocationCallback = new LocationCallback() {
             @Override
@@ -206,6 +206,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                     mAzimuth, mDirectUnitLeft, mDirectText, mDirectUnitRight);*/
             mDirectionImage.setDegress(-mAzimuth);
             mDirectionImage.invalidate();
+            mTvDirection.setText(CompassUtils.displayCurrentDirection(mAzimuth));
             mTvDegrees.setText(String.valueOf(Math.round(mAzimuth)) + "\u00b0");
         }
     }
