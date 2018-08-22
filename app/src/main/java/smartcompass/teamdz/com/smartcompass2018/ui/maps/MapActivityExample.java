@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -152,11 +153,18 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
         if (mAzimuth != newAzimuth) {
             mAzimuth = newAzimuth;
             mMarker.setRotation(mAzimuth);
+            updateCamera(mAzimuth);
             /*updateMagneticView(mCompassSensorManager.getMagnetic());
             CompassUtils.displayCurrentDirection(getApplicationContext(),
                     mAzimuth, mDirectUnitLeft, mDirectText, mDirectUnitRight);*/
 
         }
+    }
+
+    private void updateCamera(float azimuth) {
+        CameraPosition oldPos = mMap.getCameraPosition();
+        CameraPosition pos = CameraPosition.builder(oldPos).bearing(azimuth).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     @Override
