@@ -97,6 +97,7 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
 
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         mMap.setMyLocationEnabled(true);
+
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {

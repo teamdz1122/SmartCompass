@@ -98,7 +98,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int accessFinePermission
                     = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
 
-
             if (accessCoarsePermission != PackageManager.PERMISSION_GRANTED
                     || accessFinePermission != PackageManager.PERMISSION_GRANTED) {
 

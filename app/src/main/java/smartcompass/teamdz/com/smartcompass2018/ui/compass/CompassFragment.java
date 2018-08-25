@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,15 +30,17 @@ import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
 import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
+import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapActivityExample;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
-public class CompassFragment extends BaseFragment<CompassPresenter> implements SensorEventListener, CompassView {
+public class CompassFragment extends BaseFragment<CompassPresenter> implements SensorEventListener, CompassView, View.OnClickListener {
 
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
     private TextView mTvDegrees, mTvLat, mTvLon, mTvCity, mTvDirection;
+    private ImageView mIvMaps, mIvSettings;
     private float mMagnetic;
     private float[] mAccelValues = new float[]{0f, 0f, 9.8f};
     private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
@@ -76,7 +79,6 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
 
     }
 
-
     private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(10000);
@@ -89,6 +91,10 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_compass, container, false);
+        mIvMaps = view.findViewById(R.id.iv_map);
+        mIvSettings = view.findViewById(R.id.iv_settings);
+        mIvMaps.setOnClickListener(this);
+        mIvSettings.setOnClickListener(this);
         mDirectionImage = view.findViewById(R.id.iv_compass);
         mTvDegrees = view.findViewById(R.id.tv_degrees);
         mTvLat = view.findViewById(R.id.tv_latitude);
@@ -217,6 +223,23 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         String longitude = CompassUtils.decimalToDMS(lon) + CompassUtils.getLatSymbol(lon, false);
         mTvLat.setText(latitude);
         mTvLon.setText(longitude);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_settings:
+                break;
+            case R.id.iv_map:
+                mPresenter.openViewMaps();
+                break;
+        }
+    }
+
+    @Override
+    public void showViewMaps() {
+        Intent intent = new Intent(getActivity(), MapActivityExample.class);
+        startActivity(intent);
     }
 
     class AddressResultReceiver extends ResultReceiver {
