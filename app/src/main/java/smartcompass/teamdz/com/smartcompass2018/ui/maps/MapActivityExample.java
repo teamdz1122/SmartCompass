@@ -6,13 +6,12 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -33,8 +32,9 @@ import java.util.List;
 import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
+import smartcompass.teamdz.com.smartcompass2018.utils.MapsUtils;
 
-public class MapActivityExample extends FragmentActivity implements OnMapReadyCallback, SensorEventListener {
+public class MapActivityExample extends FragmentActivity implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener {
 
     private GoogleMap mMap;
     private UiSettings mUiSettings;
@@ -93,14 +93,14 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setRotateGesturesEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-
+        mUiSettings.setZoomControlsEnabled(true);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         mMap.setMyLocationEnabled(true);
-
+        mMap.setOnMyLocationButtonClickListener(this);
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
+        @SuppressLint("MissingPermission")
         @Override
         public void onLocationResult(LocationResult locationResult) {
             List<Location> locationList = locationResult.getLocations();
@@ -112,10 +112,16 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
                 }
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(MapsUtils.bitmapDescriptorFromVector(MapActivityExample.this, R.drawable.ic_my_location_black_24dp));
                 markerOptions.position(latLng);
+                markerOptions.anchor(0.5f,0.5f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                if (mFusedLocationClient != null) {
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                }
             }
         }
 
@@ -153,7 +159,9 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
         float newAzimuth = mCompassSensorManager.getAzimuth();
         if (mAzimuth != newAzimuth) {
             mAzimuth = newAzimuth;
-            mMarker.setRotation(mAzimuth);
+            if (mMarker!=null) {
+                mMarker.setRotation(mAzimuth);
+            }
             updateCamera(mAzimuth);
             /*updateMagneticView(mCompassSensorManager.getMagnetic());
             CompassUtils.displayCurrentDirection(getApplicationContext(),
@@ -171,5 +179,14 @@ public class MapActivityExample extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public boolean onMyLocationButtonClick() {
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+        }
+        return false;
     }
 }
