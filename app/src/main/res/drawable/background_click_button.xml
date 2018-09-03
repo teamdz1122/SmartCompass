@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:state_pressed="true"
-        android:drawable="@drawable/ripple_around_image"/>
-    <item
-        android:state_focused="true"
-        android:drawable="@drawable/ripple_around_image"/>
-    <item
-        android:drawable="@drawable/ic_star_gray"/>
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="#b1b1b1" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="#b1b1b1" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/colorPrimaryDark" />
+        </shape>
+    </item>
 </selector>

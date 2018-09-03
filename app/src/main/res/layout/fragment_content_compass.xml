@@ -41,14 +41,15 @@
         app:layout_constraintStart_toStartOf="@+id/iv_compass"
         app:layout_constraintTop_toTopOf="@+id/iv_compass" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/background_click_button"
+        android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -56,7 +57,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_map" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,7 +66,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/background_click_button"
+        android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toStartOf="@+id/iv_map"
         app:layout_constraintHorizontal_bias="0.5"
@@ -139,27 +141,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_settings" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_star_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/background_click_button"
+        android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
         app:srcCompat="@drawable/ic_star_gray" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/background_click_button"
+        android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
