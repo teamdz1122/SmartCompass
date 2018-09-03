@@ -5,4 +5,16 @@
     <string name="invalid_lat_long_used">Invalid lat long used</string>
     <string name="no_address_found">No address found</string>
     <string name="address_found">Address found</string>
+    <string name="text_decription_notifi_warning_1">If your blue dot\'s beam is wide or pointing in the wrong direction, you’ll need to calibrate your compass.</string>
+    <string name="text_decription_perform_warning">Make a figure 8 until your compass is calibrated. You should only have to do this a few times.</string>
+    <string name="magnetic_title">Magnetic Field : </string>
+    <string name="calibrate_title">Calibrate</string>
+    <string name="calibrate_low">Low</string>
+    <string name="calibrate_medium">Medium</string>
+    <string name="calibrate_hight">Hight</string>
+    <string name="button_rate">Rate Now</string>
+    <string name="button_rate_later">Later</string>
+    <string name="button_no_thanks">No, Thanks</string>
+    <string name="title_dialog_rate_app">Do you enjoy this app?</string>
+    <string name="message_dialog_rate_app">If you enjoy using this app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thank for your support!</string>
 </resources>

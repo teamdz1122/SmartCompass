@@ -2,15 +2,19 @@ package smartcompass.teamdz.com.smartcompass2018.ui.compass;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,22 +34,28 @@ import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
 import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
-import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapActivityExample;
+import smartcompass.teamdz.com.smartcompass2018.ui.calibrate.CalibrateActivity;
+import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
+import smartcompass.teamdz.com.smartcompass2018.ui.rate.RateAppDialog;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
 public class CompassFragment extends BaseFragment<CompassPresenter> implements SensorEventListener, CompassView, View.OnClickListener {
 
+    public static final String CALIBRATE_MAGENTIC = "CALIBRATE_MAGENTIC";
+
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
     private TextView mTvDegrees, mTvLat, mTvLon, mTvCity, mTvDirection;
-    private ImageView mIvMaps, mIvSettings;
+    private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning;
+    private Typeface mTypeface;
+    private int mCalibareMagnetic = 0;
     private float mMagnetic;
     private float[] mAccelValues = new float[]{0f, 0f, 9.8f};
     private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
     private float mAzimuth;
-    //private CompassLocation mCompassLocation;
+
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
@@ -69,14 +79,11 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTypeface = ResourcesCompat.getFont(getActivity(), R.font.roboto_bold);
         mCompassSensorManager = new CompassSensorManager(getActivity());
-        //mCompassLocation = new CompassLocation(getActivity());
         mResultReceiver = new AddressResultReceiver(new Handler());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         createLocationRequest();
-
-        //getLastLocation();
-
     }
 
     private void createLocationRequest() {
@@ -91,16 +98,26 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_content_compass, container, false);
+        RateAppDialog.showDialog(getActivity(), getFragmentManager());
         mIvMaps = view.findViewById(R.id.iv_map);
         mIvSettings = view.findViewById(R.id.iv_settings);
+        mIvStarRate = view.findViewById(R.id.iv_star_rate);
+        mIvWarning = view.findViewById(R.id.iv_warning);
         mIvMaps.setOnClickListener(this);
         mIvSettings.setOnClickListener(this);
+        mIvStarRate.setOnClickListener(this);
+        mIvWarning.setOnClickListener(this);
+
         mDirectionImage = view.findViewById(R.id.iv_compass);
         mTvDegrees = view.findViewById(R.id.tv_degrees);
         mTvLat = view.findViewById(R.id.tv_latitude);
         mTvLon = view.findViewById(R.id.tv_longitude);
         mTvCity = view.findViewById(R.id.tv_location_city);
         mTvDirection = view.findViewById(R.id.tv_direction);
+        mTvDegrees.setTypeface(mTypeface);
+        mTvCity.setTypeface(mTypeface);
+        mTvDirection.setTypeface(mTypeface);
+
         getLastLocation();
         mLocationCallback = new LocationCallback() {
             @Override
@@ -187,7 +204,24 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
+        switch (sensor.getType()) {
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                switch (i) {
+                    case SensorManager.SENSOR_STATUS_ACCURACY_LOW:
+                        mPresenter.calibrateCompass(SensorManager.SENSOR_STATUS_ACCURACY_LOW);
+                        mCalibareMagnetic = SensorManager.SENSOR_STATUS_ACCURACY_LOW;
+                        break;
+                    case SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM:
+                        mPresenter.calibrateCompass(SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM);
+                        mCalibareMagnetic = SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM;
+                        break;
+                    case SensorManager.SENSOR_STATUS_ACCURACY_HIGH:
+                        mPresenter.calibrateCompass(SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
+                        mCalibareMagnetic = SensorManager.SENSOR_STATUS_ACCURACY_HIGH;
+                        break;
 
+                }
+        }
     }
 
 
@@ -207,9 +241,6 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         float newAzimuth = mCompassSensorManager.getAzimuth();
         if (mAzimuth != newAzimuth) {
             mAzimuth = newAzimuth;
-            /*updateMagneticView(mCompassSensorManager.getMagnetic());
-            CompassUtils.displayCurrentDirection(getApplicationContext(),
-                    mAzimuth, mDirectUnitLeft, mDirectText, mDirectUnitRight);*/
             mDirectionImage.setDegress(-mAzimuth);
             mDirectionImage.invalidate();
             mTvDirection.setText(CompassUtils.displayCurrentDirection(mAzimuth));
@@ -233,12 +264,34 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             case R.id.iv_map:
                 mPresenter.openViewMaps();
                 break;
+            case R.id.iv_star_rate:
+                new RateAppDialog().show(getFragmentManager(), null);
+                break;
+            case R.id.iv_warning:
+                mPresenter.openWarning();
+                break;
         }
     }
 
     @Override
     public void showViewMaps() {
-        Intent intent = new Intent(getActivity(), MapActivityExample.class);
+        Intent intent = new Intent(getActivity(), MapsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void needToCalibrateCompass(int calibrate) {
+        if (1 == calibrate || 2 == calibrate) {
+            mIvWarning.setColorFilter(ContextCompat.getColor(getActivity(), R.color.color_warning_calibrate));
+        } else {
+            mIvWarning.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimaryWhite));
+        }
+    }
+
+    @Override
+    public void showWarning() {
+        Intent intent = new Intent(getActivity(), CalibrateActivity.class);
+        intent.putExtra(CALIBRATE_MAGENTIC, mCalibareMagnetic);
         startActivity(intent);
     }
 
@@ -258,12 +311,6 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                 mAddressOutput = "";
             }
             displayAddressOutput(mAddressOutput);
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                Toast.makeText(getActivity(),
-                        "Address found, ",
-                        Toast.LENGTH_SHORT).show();
-
-            }
         }
     }
 

@@ -27,7 +27,7 @@
         </activity>
         <activity android:name=".ui.maps.MapsActivity">
         </activity>
-        <activity android:name=".ui.maps.MapActivityExample"/>
+        <activity android:name=".ui.calibrate.CalibrateActivity"/>
         <service
             android:name=".service.location.CompassLocationService"
             android:exported="false"/>

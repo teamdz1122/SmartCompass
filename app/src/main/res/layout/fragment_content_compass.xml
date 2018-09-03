@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -47,7 +48,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:tint="@color/colorPrimaryDark"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/iv_settings"
@@ -63,7 +65,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:tint="@color/colorPrimaryDark"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="@color/colorPrimaryWhite"
         app:layout_constraintEnd_toStartOf="@+id/iv_map"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -92,6 +95,8 @@
         android:id="@+id/tv_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:text="32.05"
         android:textColor="@color/color_text_compass"
         android:textSize="@dimen/text_longitude_and_latitude_h4"
@@ -99,19 +104,21 @@
         app:layout_constraintEnd_toStartOf="@+id/tv_longitude"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/iv_star_rate" />
 
     <TextView
         android:id="@+id/tv_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="21.03"
         android:textColor="@color/color_text_compass"
         android:textSize="@dimen/text_longitude_and_latitude_h4"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_warning"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tv_latitude"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city" />
@@ -125,10 +132,36 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        android:text="DN"
         android:textColor="@color/color_text_compass"
         android:textSize="@dimen/text_title_city_h5"
-        android:text="DN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_settings" />
+
+    <ImageView
+        android:id="@+id/iv_star_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="@color/colorPrimaryWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
+        app:srcCompat="@drawable/ic_star_gray" />
+
+    <ImageView
+        android:id="@+id/iv_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:tint="@color/colorPrimaryWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
+        app:srcCompat="@drawable/ic_warning_gray" />
 </android.support.constraint.ConstraintLayout>

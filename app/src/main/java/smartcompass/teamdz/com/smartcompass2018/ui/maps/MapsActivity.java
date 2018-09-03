@@ -1,280 +1,214 @@
 package smartcompass.teamdz.com.smartcompass2018.ui.maps;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Criteria;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.util.Log;
+import android.widget.ImageView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import Modules.DirectionFinderListener;
-import Modules.Route;
 import smartcompass.teamdz.com.smartcompass2018.R;
+import smartcompass.teamdz.com.smartcompass2018.base.BaseActivity;
+import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
+import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
+import smartcompass.teamdz.com.smartcompass2018.utils.MapsUtils;
+import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
+public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView {
 
-/**
- * Created by dzteam on 7/17/2018.
- */
+    private MapView mMapView;
+    private DirectionImage mIvCompassMap;
+    private ImageView mIvAround;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, DirectionFinderListener, LocationListener {
-
-    public static final int REQUEST_ID_ACCESS_COURSE_FINE_LOCATION = 100;
-    LocationManager locationManager;
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private GoogleMap mMap;
-    private List<Marker> originMarkers = new ArrayList<>();
-    private List<Marker> destinationMarkers = new ArrayList<>();
-    private List<Polyline> polylinePaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
+    private UiSettings mUiSettings;
+    private Marker mMarker;
+    private CompassSensorManager mCompassSensorManager;
+    private LocationRequest mLocationRequest;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mLastLocation;
+    private float[] mAccelValues = new float[]{0f, 0f, 9.8f};
+    private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
+    private float mAzimuth;
+    private double mCurrentLat, mCurrentLong;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected MapsPresenter createPresenter() {
+        return new MapsPresenter(this);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("nghia", "onCreate");
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        mCompassSensorManager = new CompassSensorManager(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mIvAround = findViewById(R.id.iv_around_compass);
+        mIvCompassMap = findViewById(R.id.iv_compass_map);
+        mMapView = findViewById(R.id.map_view);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.getMapAsync(this);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            mCurrentLat = location.getLatitude();
+                            mCurrentLong = location.getLongitude();
+                        } else {
+                            Log.d("nghia", "null");
+                        }
+                    }
+                });
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        Log.d("nghia", "onMapReady");
+        mMap = googleMap;
+        createLocationRequest();
+        mUiSettings = mMap.getUiSettings();
+        mUiSettings.setCompassEnabled(false);
+        mUiSettings.setRotateGesturesEnabled(false);
+        mUiSettings.setZoomControlsEnabled(true);
+        mMap.setMyLocationEnabled(true);
+        mUiSettings.setMyLocationButtonEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+
+    }
+
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            List<Location> locationList = locationResult.getLocations();
+            if (locationList.size() > 0) {
+                Location location = locationList.get(locationList.size() - 1);
+                mLastLocation = location;
+                if (mMarker != null) {
+                    mMarker.remove();
+                }
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
+                markerOptions.position(latLng);
+                markerOptions.anchor(0.5f,1.5f);
+                markerOptions.flat(true);
+                mMarker = mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+
+                if (mFusedLocationClient != null) {
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                }
+            }
+        }
+
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMapView.onResume();
+        Log.d("nghia", "onResume");
+        mCompassSensorManager.registerAccListener(this);
+        mCompassSensorManager.registerMagneticListener(this);
+        mCompassSensorManager.registerOrientListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mMapView.onPause();
+        mCompassSensorManager.unregisterListener(this);
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mAccelValues = CompassUtils.lowPass(sensorEvent.values, mAccelValues);
+            mCompassSensorManager.setGravity(mAccelValues);
+        } else if (sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+            mMagneticValues = CompassUtils.lowPass(sensorEvent.values,
+                    mMagneticValues);
+            mCompassSensorManager.setGeoMagnetic(mMagneticValues);
+        }
+
+        mCompassSensorManager.updateAzimuth();
+        float newAzimuth = mCompassSensorManager.getAzimuth();
+        if (mAzimuth != newAzimuth) {
+            mAzimuth = newAzimuth;
+            if (mMarker!=null) {
+                mMarker.setRotation(mAzimuth);
+            }
+            mPresenter.rotateCamera(mAzimuth);
+            mIvCompassMap.setDegress(-mAzimuth);
+            mIvCompassMap.invalidate();
+
+        }
+    }
+
+    @Override
+    public void rotateCamera(float azimuth) {
+        CameraPosition oldPos = mMap.getCameraPosition();
+        CameraPosition pos = CameraPosition.builder(oldPos).bearing(azimuth).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
 
 
     }
 
     @SuppressLint("MissingPermission")
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Thiết lập sự kiện đã tải Map thành công
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-
-            @Override
-            public void onMapLoaded() {
-                // Đã tải thành công thì tắt Dialog Progress đi
-                // myProgress.dismiss();
-
-                // Hiển thị vị trí người dùng.
-                askPermissionsAndShowMyLocation();
-            }
-        });
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMyLocationEnabled(true);
-       // mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-    }
-
-    private void askPermissionsAndShowMyLocation() {
-
-        // Với API >= 23, bạn phải hỏi người dùng cho phép xem vị trí của họ.
-        if (Build.VERSION.SDK_INT >= 23) {
-            int accessCoarsePermission
-                    = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-            int accessFinePermission
-                    = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-            if (accessCoarsePermission != PackageManager.PERMISSION_GRANTED
-                    || accessFinePermission != PackageManager.PERMISSION_GRANTED) {
-
-                // Các quyền cần người dùng cho phép.
-                String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION};
-
-                // Hiển thị một Dialog hỏi người dùng cho phép các quyền trên.
-                ActivityCompat.requestPermissions(this, permissions,
-                        REQUEST_ID_ACCESS_COURSE_FINE_LOCATION);
-
-                return;
-            }
+    public boolean onMyLocationButtonClick() {
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
-
-        // Hiển thị vị trí hiện thời trên bản đồ.
-        this.showMyLocation();
-    }
-
-    private String getEnabledLocationProvider() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-
-        // Tiêu chí để tìm một nhà cung cấp vị trí.
-        Criteria criteria = new Criteria();
-
-        // Tìm một nhà cung vị trí hiện thời tốt nhất theo tiêu chí trên.
-        // ==> "gps", "network",...
-        String bestProvider = locationManager.getBestProvider(criteria, true);
-
-        boolean enabled = locationManager.isProviderEnabled(bestProvider);
-
-        if (!enabled) {
-            Toast.makeText(this, "No location provider enabled!", Toast.LENGTH_LONG).show();
-            //Log.i(MYTAG, "No location provider enabled!");
-            return null;
-        }
-        return bestProvider;
-    }
-
-    private void showMyLocation() {
-
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        String locationProvider = this.getEnabledLocationProvider();
-
-        if (locationProvider == null) {
-            return;
-        }
-
-        // Millisecond
-        final long MIN_TIME_BW_UPDATES = 1000;
-        // Met
-        final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
-
-        Location myLocation = null;
-        try {
-
-            // Đoạn code nay cần người dùng cho phép (Hỏi ở trên ***).
-            locationManager.requestLocationUpdates(
-                    locationProvider,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES, (LocationListener) this);
-
-            // Lấy ra vị trí.
-            myLocation = locationManager
-                    .getLastKnownLocation(locationProvider);
-        }
-        // Với Android API >= 23 phải catch SecurityException.
-        catch (SecurityException e) {
-            Toast.makeText(this, "Show My Location Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-
-            e.printStackTrace();
-            return;
-        }
-
-        if (myLocation != null) {
-
-            LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(latLng)             // Sets the center of the map to location user
-                    .zoom(15).build();                 // Sets the zoom
-//                    .bearing(90)                // Sets the orientation of the camera to east
-//                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
-//                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            // Thêm Marker cho Map:
-            MarkerOptions option = new MarkerOptions();
-            option.title(String.valueOf(myLocation));
-            //option.snippet("....");
-            option.position(latLng);
-            // Marker currentMarker = mMap.addMarker(option);
-            //currentMarker.showInfoWindow();
-        } else {
-            Toast.makeText(this, "Location not found!", Toast.LENGTH_LONG).show();
-
-        }
-
-    }
-
-    @Override
-    public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(this, "Please wait.",
-                "Finding direction..!", true);
-
-        if (originMarkers != null) {
-            for (Marker marker : originMarkers) {
-                marker.remove();
-            }
-        }
-
-        if (destinationMarkers != null) {
-            for (Marker marker : destinationMarkers) {
-                marker.remove();
-            }
-        }
-
-        if (polylinePaths != null) {
-            for (Polyline polyline : polylinePaths) {
-                polyline.remove();
-            }
-        }
-    }
-
-    @Override
-    public void onDirectionFinderSuccess(List<Route> routes) {
-        progressDialog.dismiss();
-        polylinePaths = new ArrayList<>();
-        originMarkers = new ArrayList<>();
-        destinationMarkers = new ArrayList<>();
-
-        for (Route route : routes) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 10));
-
-            originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
-                    .title(route.startAddress)
-                    .position(route.startLocation)));
-            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
-                    .title(route.endAddress)
-                    .position(route.endLocation)));
-
-            PolylineOptions polylineOptions = new PolylineOptions().
-                    geodesic(true).
-                    color(Color.BLUE).
-                    width(10);
-
-            for (int i = 0; i < route.points.size(); i++)
-                polylineOptions.add(route.points.get(i));
-
-            polylinePaths.add(mMap.addPolyline(polylineOptions));
-        }
+        return false;
     }
 
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

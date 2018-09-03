@@ -5,21 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
-    protected P presenter;
+    protected P mPresenter;
 
     protected abstract P createPresenter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        presenter = createPresenter();
+        mPresenter = createPresenter();
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (presenter != null) {
-            presenter.detachView();
+        if (mPresenter != null) {
+            mPresenter.detachView();
         }
     }
 }

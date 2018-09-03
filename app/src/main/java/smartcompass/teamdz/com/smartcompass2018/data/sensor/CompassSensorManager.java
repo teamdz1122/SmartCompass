@@ -24,9 +24,6 @@ public class CompassSensorManager {
     private Context mContext;
 
     public CompassSensorManager(Context context) {
-        if (context==null){
-            Log.d("nghia","context = null");
-        }
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometerSensor = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

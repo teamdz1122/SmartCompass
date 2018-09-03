@@ -6,4 +6,8 @@ public interface CompassView {
     void setChangeDirection(SensorEvent sensorEvent);
     void setLocationText(double lat, double lon);
     void showViewMaps();
+
+    void needToCalibrateCompass(int calibrate);
+
+    void showWarning();
 }

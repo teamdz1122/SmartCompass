@@ -21,4 +21,12 @@ public class CompassPresenter extends BasePresenter<CompassView> {
     public void openViewMaps() {
         mView.showViewMaps();
     }
+
+    public void calibrateCompass(int calibrate) {
+        mView.needToCalibrateCompass(calibrate);
+    }
+
+    public void openWarning() {
+        mView.showWarning();
+    }
 }
