@@ -3,19 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity">
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <smartcompass.teamdz.com.smartcompass2018.view.LineView
         android:id="@+id/line_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <FrameLayout
         android:layout_width="330dp"
         android:layout_height="330dp"
         android:layout_gravity="center">
+
         <ImageView
             android:id="@+id/iv_around_compass"
             android:layout_width="match_parent"
@@ -29,6 +33,4 @@
             android:layout_gravity="center"
             android:src="@mipmap/compass_map" />
     </FrameLayout>
-
-
 </FrameLayout>

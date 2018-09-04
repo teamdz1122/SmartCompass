@@ -164,4 +164,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city"
         app:srcCompat="@drawable/ic_warning_gray" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_compass"
+        app:layout_constraintStart_toStartOf="@+id/iv_compass"
+        app:layout_constraintTop_toTopOf="@+id/iv_compass"
+        app:srcCompat="@mipmap/line_degrees" />
 </android.support.constraint.ConstraintLayout>
