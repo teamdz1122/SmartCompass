@@ -39,6 +39,7 @@ import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.rate.RateAppDialog;
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
+import smartcompass.teamdz.com.smartcompass2018.utils.InterstitialUtils;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
 public class CompassFragment extends BaseFragment<CompassPresenter> implements SensorEventListener, CompassView, View.OnClickListener {
@@ -262,7 +263,13 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             case R.id.iv_settings:
                 break;
             case R.id.iv_map:
-                mPresenter.openViewMaps();
+                //mPresenter.openViewMaps();
+                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
+                    @Override
+                    public void onAdClosed() {
+                        mPresenter.openViewMaps();
+                    }
+                });
                 break;
             case R.id.iv_star_rate:
                 new RateAppDialog().show(getFragmentManager(), null);
