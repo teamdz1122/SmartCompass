@@ -41,7 +41,6 @@ import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
 public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView {
 
-    private MapView mMapView;
     private DirectionImage mIvCompassMap;
     private ImageView mIvAround;
 
@@ -56,6 +55,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
     private float mAzimuth;
     private double mCurrentLat, mCurrentLong;
+    private LatLng mLatLng;
 
 
     @Override
@@ -73,25 +73,8 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mIvAround = findViewById(R.id.iv_around_compass);
         mIvCompassMap = findViewById(R.id.iv_compass_map);
-        mMapView = findViewById(R.id.map_view);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this);
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            mCurrentLat = location.getLatitude();
-                            mCurrentLong = location.getLongitude();
-                        } else {
-                            Log.d("nghia", "null");
-                        }
-                    }
-                });
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     private void createLocationRequest() {
@@ -127,14 +110,14 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                 if (mMarker != null) {
                     mMarker.remove();
                 }
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
-                markerOptions.position(latLng);
+                markerOptions.position(mLatLng);
                 markerOptions.anchor(0.5f,1.5f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 15));
 
                 if (mFusedLocationClient != null) {
                     mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -148,8 +131,6 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     @Override
     protected void onResume() {
         super.onResume();
-        mMapView.onResume();
-        Log.d("nghia", "onResume");
         mCompassSensorManager.registerAccListener(this);
         mCompassSensorManager.registerMagneticListener(this);
         mCompassSensorManager.registerOrientListener(this);
@@ -158,7 +139,6 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     @Override
     protected void onPause() {
         super.onPause();
-        mMapView.onPause();
         mCompassSensorManager.unregisterListener(this);
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
@@ -184,14 +164,13 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             mPresenter.rotateCamera(mAzimuth);
             mIvCompassMap.setDegress(-mAzimuth);
             mIvCompassMap.invalidate();
-
         }
     }
 
     @Override
     public void rotateCamera(float azimuth) {
         CameraPosition oldPos = mMap.getCameraPosition();
-        CameraPosition pos = CameraPosition.builder(oldPos).bearing(azimuth).build();
+        CameraPosition pos = CameraPosition.builder(oldPos).target(mLatLng).bearing(azimuth).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 

@@ -48,7 +48,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
 
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
-    private TextView mTvDegrees, mTvLat, mTvLon, mTvCity, mTvDirection;
+    private TextView mTvLat, mTvLon, mTvCity, mTvDegreesDirection;
     private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning;
     private Typeface mTypeface;
     private int mCalibareMagnetic = 0;
@@ -110,14 +110,12 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         mIvWarning.setOnClickListener(this);
 
         mDirectionImage = view.findViewById(R.id.iv_compass);
-        mTvDegrees = view.findViewById(R.id.tv_degrees);
         mTvLat = view.findViewById(R.id.tv_latitude);
         mTvLon = view.findViewById(R.id.tv_longitude);
         mTvCity = view.findViewById(R.id.tv_location_city);
-        mTvDirection = view.findViewById(R.id.tv_direction);
-        mTvDegrees.setTypeface(mTypeface);
+        mTvDegreesDirection = view.findViewById(R.id.tv_degrees_direction);
         mTvCity.setTypeface(mTypeface);
-        mTvDirection.setTypeface(mTypeface);
+        mTvDegreesDirection.setTypeface(mTypeface);
 
         getLastLocation();
         mLocationCallback = new LocationCallback() {
@@ -244,8 +242,9 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             mAzimuth = newAzimuth;
             mDirectionImage.setDegress(-mAzimuth);
             mDirectionImage.invalidate();
-            mTvDirection.setText(CompassUtils.displayCurrentDirection(mAzimuth));
-            mTvDegrees.setText(String.valueOf(Math.round(mAzimuth)) + "\u00b0");
+            int degrees = Math.round(mAzimuth);
+            String direction = CompassUtils.displayCurrentDirection(mAzimuth);
+            mTvDegreesDirection.setText(getString(R.string.text_degrees_direction, degrees, direction));
         }
     }
 

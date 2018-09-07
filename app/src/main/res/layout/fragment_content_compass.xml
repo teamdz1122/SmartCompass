@@ -20,26 +20,7 @@
         android:src="@mipmap/compass_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_direction" />
-
-    <TextView
-        android:id="@+id/tv_degrees"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Tọa độ"
-        android:textColor="@color/color_text_compass"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_compass"
-        app:layout_constraintEnd_toEndOf="@+id/iv_compass"
-        app:layout_constraintStart_toStartOf="@+id/iv_compass"
-        app:layout_constraintTop_toTopOf="@+id/iv_compass" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_degrees_direction" />
 
     <ImageButton
         android:id="@+id/iv_map"
@@ -87,7 +68,7 @@
         android:layout_marginTop="36dp"
         android:text="Ha Noi"
         android:textColor="@color/color_text_compass"
-        android:textSize="@dimen/text_title_city_h5"
+        android:textSize="@dimen/text_title_city_h6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_location_city" />
 
     <TextView
-        android:id="@+id/tv_direction"
+        android:id="@+id/tv_degrees_direction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -136,7 +117,7 @@
         android:layout_marginTop="12dp"
         android:text="DN"
         android:textColor="@color/color_text_compass"
-        android:textSize="@dimen/text_title_city_h5"
+        android:textSize="@dimen/text_title_city_h6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_settings" />

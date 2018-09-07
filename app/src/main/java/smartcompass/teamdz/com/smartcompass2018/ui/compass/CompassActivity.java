@@ -30,15 +30,6 @@ import smartcompass.teamdz.com.smartcompass2018.utils.InterstitialUtils;
 public class CompassActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_PERMISSION = 200;
-    /*private ImageView mIvCompass;
-        private TextView mTvDegress;
-        private SensorManager mSensorManager;
-
-        private float[] mGravity = new float[]{0f,0f,9.8f};
-        private float[] mGeomagnetic = new float[3];
-        private float azimuth = 0f;
-        private float currectAzimuth = 0f;
-        private static final float ALPHA = 0.1f;*/
     private String[] PERMISSION_NAME = {Manifest.permission.ACCESS_FINE_LOCATION};
     private CompassFragment mCompassFragment;
     private NativeExpressAdView mContainerAd;
@@ -53,10 +44,6 @@ public class CompassActivity extends AppCompatActivity {
         } else {
             initView();
         }
-        InterstitialUtils.getSharedInstance().init(getApplicationContext());
-
-        adsUnit();
-
     }
 
     private void initView() {
@@ -66,6 +53,8 @@ public class CompassActivity extends AppCompatActivity {
             mCompassFragment = CompassFragment.newInstance();
             getSupportFragmentManager().beginTransaction().add(R.id.layout_content, mCompassFragment).commitAllowingStateLoss();
         }
+        InterstitialUtils.getSharedInstance().init(getApplicationContext());
+        adsUnit();
     }
 
 
