@@ -77,12 +77,13 @@ public class RateAppDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         doNeutralClick();
+
                     }
                 }).create();
     }
 
     private void doNeutralClick() {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getActivity().getPackageName())));
+
         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
         getDialog().dismiss();
     }
@@ -92,6 +93,7 @@ public class RateAppDialog extends DialogFragment {
     }
 
     private void doPositiveClick() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getActivity().getPackageName())));
         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
         getDialog().dismiss();
     }

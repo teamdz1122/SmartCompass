@@ -19,4 +19,12 @@
     <string name="message_dialog_rate_app">If you enjoy using this app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thank for your support!</string>
     <string name="text_degrees_direction">%d\u00b0 %s</string>
     <string name="ad_unit_banner">ca-app-pub-9569615767688214/5083951357</string>
+    <string name="setting">Setting</string>
+    <string name="share">Share App</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="about_us">About Us</string>
+    <string name="decription1">SmartCompass: is the best smart compass for android,user-friendly with a beautifully crafted design is the most gorgeous best compass app in the store.</string>
+    <string name="decription2">It features everything you could ever need to get by in the great outdoors, including a digital compass GPS that shows direction relative to the geographic cardinal directions, with true north and magnetic North, south, east, and west coordinates, speed of travel and map that makes navigating your world faster and easier.</string>
+    <string name="decription3">It helps you locate your current location and you can find your way easily through the best compass app with gps map.</string>
+    <string name="decription4">If you like the app, please help we 5 star review.Thank you very much!</string>
 </resources>

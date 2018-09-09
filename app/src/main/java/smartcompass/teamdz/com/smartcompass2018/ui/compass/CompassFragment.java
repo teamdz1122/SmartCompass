@@ -23,6 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -34,6 +38,7 @@ import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
 import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
+import smartcompass.teamdz.com.smartcompass2018.ui.SettingActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.calibrate.CalibrateActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.rate.RateAppDialog;
@@ -63,6 +68,8 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     private LocationCallback mLocationCallback;
     private AddressResultReceiver mResultReceiver;
     private String mAddressOutput;
+
+    private NativeExpressAdView mContainerAd;
 
     public CompassFragment() {
     }
@@ -116,7 +123,9 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         mTvDegreesDirection = view.findViewById(R.id.tv_degrees_direction);
         mTvCity.setTypeface(mTypeface);
         mTvDegreesDirection.setTypeface(mTypeface);
+        mContainerAd = view.findViewById(R.id.ads_banner_home);
 
+        adsUnit();
         getLastLocation();
         mLocationCallback = new LocationCallback() {
             @Override
@@ -136,6 +145,43 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         return view;
     }
 
+    private void adsUnit() {
+        final NativeExpressAdView mAdView = new NativeExpressAdView(getContext());
+        final AdRequest request = new AdRequest.Builder().build();
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-9569615767688214/5083951357");
+        mContainerAd.addView(mAdView);
+        mAdView.loadAd(request);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                super.onAdLeftApplication();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+
+            }
+        });
+    }
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         mFusedLocationClient.getLastLocation()
@@ -260,6 +306,13 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_settings:
+                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
+                    @Override
+                    public void onAdClosed() {
+                        Intent intent = new Intent(getActivity(), SettingActivity.class);
+                        startActivity(intent);                    }
+                });
+
                 break;
             case R.id.iv_map:
                 //mPresenter.openViewMaps();

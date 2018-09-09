@@ -11,13 +11,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.google.android.gms.ads.NativeExpressAdView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/ads_banner_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:adSize="SMART_BANNER"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        app:adUnitId="@string/ad_unit_banner"/>
 </RelativeLayout>

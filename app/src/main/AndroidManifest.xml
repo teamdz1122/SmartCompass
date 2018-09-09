@@ -33,6 +33,9 @@
         <activity android:name=".ui.maps.MapsActivity">
         </activity>
         <activity android:name=".ui.calibrate.CalibrateActivity"/>
+        <activity android:name=".ui.SettingActivity"/>
+        <activity android:name=".ui.ActivityAboutUs"/>
+
         <service
             android:name=".service.location.CompassLocationService"
             android:exported="false"/>

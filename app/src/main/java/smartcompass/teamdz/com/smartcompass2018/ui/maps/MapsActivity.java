@@ -161,7 +161,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             if (mMarker!=null) {
                 mMarker.setRotation(mAzimuth);
             }
-            mPresenter.rotateCamera(mAzimuth);
+//            mPresenter.rotateCamera(mAzimuth);
             mIvCompassMap.setDegress(-mAzimuth);
             mIvCompassMap.invalidate();
         }
@@ -170,8 +170,8 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     @Override
     public void rotateCamera(float azimuth) {
         CameraPosition oldPos = mMap.getCameraPosition();
-        CameraPosition pos = CameraPosition.builder(oldPos).target(mLatLng).bearing(azimuth).build();
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+      //  CameraPosition pos = CameraPosition.builder(oldPos).target(mLatLng).bearing(azimuth).build();
+      //  mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     @Override
