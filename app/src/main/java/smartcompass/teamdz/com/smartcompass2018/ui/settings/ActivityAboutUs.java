@@ -1,4 +1,4 @@
-package smartcompass.teamdz.com.smartcompass2018.ui;
+package smartcompass.teamdz.com.smartcompass2018.ui.settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

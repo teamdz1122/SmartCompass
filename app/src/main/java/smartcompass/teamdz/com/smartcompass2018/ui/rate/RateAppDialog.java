@@ -83,7 +83,6 @@ public class RateAppDialog extends DialogFragment {
     }
 
     private void doNeutralClick() {
-
         getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
         getDialog().dismiss();
     }

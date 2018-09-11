@@ -1,4 +1,4 @@
-package smartcompass.teamdz.com.smartcompass2018.ui;
+package smartcompass.teamdz.com.smartcompass2018.ui.settings;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 
-import smartcompass.teamdz.com.smartcompass2018.ui.ActivityAboutUs;
 import smartcompass.teamdz.com.smartcompass2018.R;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {

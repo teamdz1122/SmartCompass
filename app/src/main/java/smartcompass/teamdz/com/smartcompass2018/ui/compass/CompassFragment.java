@@ -38,7 +38,7 @@ import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
 import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
-import smartcompass.teamdz.com.smartcompass2018.ui.SettingActivity;
+import smartcompass.teamdz.com.smartcompass2018.ui.settings.SettingActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.calibrate.CalibrateActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.rate.RateAppDialog;

@@ -73,10 +73,26 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mIvAround = findViewById(R.id.iv_around_compass);
         mIvCompassMap = findViewById(R.id.iv_compass_map);
+        getLastLocation();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            mCurrentLat = location.getLatitude();
+                            mCurrentLong = location.getLongitude();
+                        } else {
+                            Log.d("nghia", "null");
+                        }
+                    }
+                });
+    }
     private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -92,11 +108,10 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setRotateGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(true);
-        mMap.setMyLocationEnabled(true);
         mUiSettings.setMyLocationButtonEnabled(true);
-        mMap.setOnMyLocationButtonClickListener(this);
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(this);
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -161,7 +176,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             if (mMarker!=null) {
                 mMarker.setRotation(mAzimuth);
             }
-//            mPresenter.rotateCamera(mAzimuth);
+            mPresenter.rotateCamera(mAzimuth);
             mIvCompassMap.setDegress(-mAzimuth);
             mIvCompassMap.invalidate();
         }
@@ -170,8 +185,8 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     @Override
     public void rotateCamera(float azimuth) {
         CameraPosition oldPos = mMap.getCameraPosition();
-      //  CameraPosition pos = CameraPosition.builder(oldPos).target(mLatLng).bearing(azimuth).build();
-      //  mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
+        CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mCurrentLat,mCurrentLong)).bearing(azimuth).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     @Override
