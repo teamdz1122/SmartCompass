@@ -72,8 +72,24 @@ public class CompassLocationService extends IntentService {
                 Log.d("nghia","a = " + address.getAddressLine(i));
                 addressFragments.add(address.getAddressLine(i));
             }*/
-            String addressStr = address.getLocality();
+            String addressStr = "";
+            String locality = address.getLocality();
+            String area = address.getAdminArea();
+            String countryName = address.getCountryName();
+            String featureName = address.getFeatureName();
             Log.i(TAG, getString(R.string.address_found));
+            if (featureName != null) {
+                addressStr = featureName;
+            }
+            if (countryName != null) {
+                addressStr = countryName;
+            }
+            if (area != null) {
+                addressStr = area;
+            }
+            if (locality != null) {
+                addressStr = locality;
+            }
             deliverResultToReceiver(Constants.SUCCESS_RESULT, addressStr);
         }
     }

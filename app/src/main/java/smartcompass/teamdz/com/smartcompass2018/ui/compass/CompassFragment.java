@@ -182,6 +182,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             }
         });
     }
+
     @SuppressLint("MissingPermission")
     private void getLastLocation() {
         mFusedLocationClient.getLastLocation()
@@ -310,12 +311,12 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                     @Override
                     public void onAdClosed() {
                         Intent intent = new Intent(getActivity(), SettingActivity.class);
-                        startActivity(intent);                    }
+                        startActivity(intent);
+                    }
                 });
 
                 break;
             case R.id.iv_map:
-                //mPresenter.openViewMaps();
                 InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
                     @Override
                     public void onAdClosed() {

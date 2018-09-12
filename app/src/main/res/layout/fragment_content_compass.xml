@@ -27,8 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/background_click_button"
         android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
@@ -43,10 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/background_click_button"
         android:padding="8dp"
         android:tint="@color/colorPrimaryWhite"
@@ -127,12 +124,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_click_button"
         android:padding="8dp"
-        android:layout_marginTop="30dp"
         android:tint="@color/color_warning_calibrate"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_compass"
+        app:layout_constraintTop_toTopOf="@+id/tv_location_city"
         app:srcCompat="@drawable/ic_star_gray" />
 
     <ImageButton
@@ -140,12 +137,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background_click_button"
         android:padding="8dp"
-        android:layout_marginTop="30dp"
         android:tint="@color/color_warning_calibrate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_compass"
+        app:layout_constraintTop_toTopOf="@+id/tv_location_city"
         app:srcCompat="@drawable/ic_warning_gray" />
 
     <ImageView

@@ -93,6 +93,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                     }
                 });
     }
+
     private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -129,7 +130,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
                 markerOptions.position(mLatLng);
-                markerOptions.anchor(0.5f,1.5f);
+                markerOptions.anchor(0.5f, 1.5f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 15));
@@ -173,7 +174,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         float newAzimuth = mCompassSensorManager.getAzimuth();
         if (mAzimuth != newAzimuth) {
             mAzimuth = newAzimuth;
-            if (mMarker!=null) {
+            if (mMarker != null) {
                 mMarker.setRotation(mAzimuth);
             }
             mPresenter.rotateCamera(mAzimuth);
@@ -184,14 +185,16 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
 
     @Override
     public void rotateCamera(float azimuth) {
+        if (mMap == null) {
+            return;
+        }
         CameraPosition oldPos = mMap.getCameraPosition();
-        CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mCurrentLat,mCurrentLong)).bearing(azimuth).build();
+        CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mCurrentLat, mCurrentLong)).bearing(azimuth).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
 
     }
 
