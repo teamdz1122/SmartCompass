@@ -8,8 +8,8 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 public class InterstitialUtils {
-    private final String APP_ID="ca-app-pub-9569615767688214~5977359766";
-    private final String INTERSTITIAL_AD_UNIT="ca-app-pub-9569615767688214/1204964831";
+    private final String APP_ID="ca-app-pub-3940256099942544~334751171";
+    private final String INTERSTITIAL_AD_UNIT="ca-app-pub-3940256099942544/1033173712";
     private InterstitialAd interstitialAd;
     private static InterstitialUtils sharedInstance;
     private AdCloseListener adCloseListener;

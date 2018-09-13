@@ -163,5 +163,5 @@
         app:adSize="SMART_BANNER"
         android:layout_centerHorizontal="true"
         app:layout_constraintTop_toBottomOf="@+id/tv_longitude"
-        app:adUnitId="@string/ad_unit_banner"/>
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"/>
 </android.support.constraint.ConstraintLayout>

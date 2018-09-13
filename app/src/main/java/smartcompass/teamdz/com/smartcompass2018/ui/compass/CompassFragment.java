@@ -149,7 +149,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         final NativeExpressAdView mAdView = new NativeExpressAdView(getContext());
         final AdRequest request = new AdRequest.Builder().build();
         mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-9569615767688214/5083951357");
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         mContainerAd.addView(mAdView);
         mAdView.loadAd(request);
         mAdView.setAdListener(new AdListener() {

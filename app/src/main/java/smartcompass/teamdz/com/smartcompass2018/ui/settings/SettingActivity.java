@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         final NativeExpressAdView mAdView = new NativeExpressAdView(this);
         final AdRequest request = new AdRequest.Builder().build();
         mAdView.setAdSize(new AdSize(AdSize.FULL_WIDTH,350));
-        mAdView.setAdUnitId("ca-app-pub-9569615767688214/5083951357");
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         mContainerAd.addView(mAdView);
         mAdView.loadAd(request);
         mAdView.setAdListener(new AdListener() {
