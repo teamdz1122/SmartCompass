@@ -28,7 +28,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
 public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView {
 
+    private static final float DEFAULT_ZOOM = 15f;
     private DirectionImage mIvCompassMap;
     private ImageView mIvAround;
 
@@ -56,6 +59,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     private float mAzimuth;
     private double mCurrentLat, mCurrentLong;
     private LatLng mLatLng;
+    private Location mLastKnownLocation;
 
 
     @Override
@@ -73,12 +77,11 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mIvAround = findViewById(R.id.iv_around_compass);
         mIvCompassMap = findViewById(R.id.iv_compass_map);
-        getLastLocation();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-    @SuppressLint("MissingPermission")
+   /*@SuppressLint("MissingPermission")
     private void getLastLocation() {
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -92,10 +95,12 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                         }
                     }
                 });
-    }
+    }*/
 
     private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(2 * 1000);
+        mLocationRequest.setFastestInterval(2 * 1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -110,34 +115,55 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mUiSettings.setRotateGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(true);
         mUiSettings.setMyLocationButtonEnabled(true);
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
+        getDeviceLocation();
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @SuppressLint("MissingPermission")
         @Override
         public void onLocationResult(LocationResult locationResult) {
+            if (locationResult == null) {
+                return;
+            }
+
             List<Location> locationList = locationResult.getLocations();
-            if (locationList.size() > 0) {
-                Location location = locationList.get(locationList.size() - 1);
-                mLastLocation = location;
+            Log.d("nghia","locationList" + locationList.size());
+            for (Location location : locationList) {
+                mLastKnownLocation = location;
                 if (mMarker != null) {
                     mMarker.remove();
                 }
-                mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_my_location));
-                markerOptions.position(mLatLng);
-                markerOptions.anchor(0.5f, 1.5f);
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location));
+                markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
+                markerOptions.anchor(0.5f, 2.0f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 15));
-
+                /*CameraPosition oldPos = mMap.getCameraPosition();
+                CameraPosition cameraPosition = new CameraPosition.Builder(oldPos)
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .zoom(DEFAULT_ZOOM)
+                        .build();*/
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                        location.getLongitude()),DEFAULT_ZOOM));
                 if (mFusedLocationClient != null) {
                     mFusedLocationClient.removeLocationUpdates(mLocationCallback);
                 }
+                /*mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location));
+                markerOptions.position(mLatLng);
+                markerOptions.anchor(0.5f, 2.0f);
+                markerOptions.flat(true);
+                mMarker = mMap.addMarker(markerOptions);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, DEFAULT_ZOOM));
+
+                if (mFusedLocationClient != null) {
+                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                }*/
             }
         }
 
@@ -189,7 +215,11 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             return;
         }
         CameraPosition oldPos = mMap.getCameraPosition();
-        CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mCurrentLat, mCurrentLong)).bearing(azimuth).build();
+        CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mLastKnownLocation.getLatitude(),
+                mLastKnownLocation.getLongitude()))
+                .bearing(azimuth)
+                //.zoom(DEFAULT_ZOOM)
+                .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
 
@@ -206,6 +236,24 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         }
         return false;
     }
-
+    @SuppressLint("MissingPermission")
+    public void getDeviceLocation() {
+        Task<Location> locationResult = mFusedLocationClient.getLastLocation();
+        locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if (task.isSuccessful()) {
+                    mLastKnownLocation = task.getResult();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            new LatLng(mLastKnownLocation.getLatitude(),
+                                    mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                } else {
+                    Log.d("nghia", "Current location is null. Using defaults.");
+                    Log.e("nghia", "Exception: %s", task.getException());
+                    mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                }
+            }
+        });
+    }
 
 }
