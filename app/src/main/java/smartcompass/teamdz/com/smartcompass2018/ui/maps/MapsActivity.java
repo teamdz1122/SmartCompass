@@ -130,7 +130,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             }
 
             List<Location> locationList = locationResult.getLocations();
-            Log.d("nghia","locationList" + locationList.size());
+            Log.d("nghia","mLocationCallback()");
             for (Location location : locationList) {
                 mLastKnownLocation = location;
                 if (mMarker != null) {
@@ -142,28 +142,9 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                 markerOptions.anchor(0.5f, 2.0f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
-                /*CameraPosition oldPos = mMap.getCameraPosition();
-                CameraPosition cameraPosition = new CameraPosition.Builder(oldPos)
-                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .zoom(DEFAULT_ZOOM)
-                        .build();*/
+
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                         location.getLongitude()),DEFAULT_ZOOM));
-                if (mFusedLocationClient != null) {
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-                }
-                /*mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location));
-                markerOptions.position(mLatLng);
-                markerOptions.anchor(0.5f, 2.0f);
-                markerOptions.flat(true);
-                mMarker = mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, DEFAULT_ZOOM));
-
-                if (mFusedLocationClient != null) {
-                    mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-                }*/
             }
         }
 
@@ -211,14 +192,14 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
 
     @Override
     public void rotateCamera(float azimuth) {
-        if (mMap == null) {
+        if (mMap == null || mLastKnownLocation == null) {
             return;
         }
+        Log.d("nghia","rotateCamera()");
         CameraPosition oldPos = mMap.getCameraPosition();
         CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mLastKnownLocation.getLatitude(),
                 mLastKnownLocation.getLongitude()))
                 .bearing(azimuth)
-                //.zoom(DEFAULT_ZOOM)
                 .build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
     }
@@ -238,6 +219,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     }
     @SuppressLint("MissingPermission")
     public void getDeviceLocation() {
+        Log.d("nghia","getDeviceLocation()");
         Task<Location> locationResult = mFusedLocationClient.getLastLocation();
         locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
             @Override
