@@ -10,4 +10,5 @@
     <color name="color_warning_calibrate">#f9e536</color>
     <color name="color_calibrate_low">#ec4a25</color>
     <color name="color_calibrate_medium">#e2bc23</color>
+    <color name="ic_launcher_background">#CF4A21</color>
 </resources>

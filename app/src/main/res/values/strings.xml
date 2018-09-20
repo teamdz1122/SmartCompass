@@ -5,7 +5,7 @@
     <string name="invalid_lat_long_used">Invalid lat long used</string>
     <string name="no_address_found">No address found</string>
     <string name="address_found">Address found</string>
-    <string name="text_decription_notifi_warning_1">If your blue dot\'s beam is wide or pointing in the wrong direction, you’ll need to calibrate your compass.</string>
+    <string name="text_decription_notifi_warning_1">If you see a warning icon in yellow @ or Magnetic Field’s value being low or medium, you’ll need to calibrate your compass.</string>
     <string name="text_decription_perform_warning">Make a figure 8 until your compass is calibrated. You should only have to do this a few times.</string>
     <string name="magnetic_title">Magnetic Field : </string>
     <string name="calibrate_title">Calibrate</string>

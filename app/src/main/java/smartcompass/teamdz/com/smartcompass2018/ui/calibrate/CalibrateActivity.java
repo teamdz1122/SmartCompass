@@ -1,5 +1,9 @@
 package smartcompass.teamdz.com.smartcompass2018.ui.calibrate;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +13,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import smartcompass.teamdz.com.smartcompass2018.R;
@@ -18,12 +26,12 @@ import smartcompass.teamdz.com.smartcompass2018.ui.compass.CompassFragment;
 public class CalibrateActivity extends BaseActivity<CalibratePresenter> implements SensorEventListener, CalibrateView {
 
     private Toolbar mToolbar;
-    private TextView mTvMagnetic;
+    private TextView mTvMagnetic, mTVDecriptionWarning;
     private int mCaliMagnetic;
 
     @Override
     protected CalibratePresenter createPresenter() {
-        return new CalibratePresenter();
+        return new CalibratePresenter(this);
     }
 
     @Override
@@ -39,7 +47,11 @@ public class CalibrateActivity extends BaseActivity<CalibratePresenter> implemen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle(R.string.calibrate_title);
+
         mTvMagnetic = findViewById(R.id.tv_magnetic_value);
+        mTVDecriptionWarning = findViewById(R.id.tv_decription_warning);
+        String warningStr = getString(R.string.text_decription_notifi_warning_1);
+        mPresenter.setIconInText(warningStr);
         mCaliMagnetic = getIntent().getIntExtra(CompassFragment.CALIBRATE_MAGENTIC, 0);
         setTextForMagnetic(mCaliMagnetic);
     }
@@ -84,5 +96,17 @@ public class CalibrateActivity extends BaseActivity<CalibratePresenter> implemen
 
                 }
         }
+    }
+
+    @Override
+    public void addIconInText(String warningStr) {
+        SpannableString spanStr = new SpannableString(warningStr);
+        int index = spanStr.toString().indexOf("@");
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_warning_gray);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.setColorFilter(new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY));
+        ImageSpan imageSpan = new ImageSpan(drawable);
+        spanStr.setSpan(imageSpan, index, index+1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        mTVDecriptionWarning.setText(spanStr);
     }
 }
