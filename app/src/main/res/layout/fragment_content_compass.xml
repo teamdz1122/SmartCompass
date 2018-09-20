@@ -114,7 +114,7 @@
         android:id="@+id/iv_star_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_top_image_star_warning"
+        android:layout_marginBottom="@dimen/margin_bottom_image_star_warning"
         android:layout_marginStart="16dp"
         android:background="@drawable/background_click_button"
         android:padding="8dp"
