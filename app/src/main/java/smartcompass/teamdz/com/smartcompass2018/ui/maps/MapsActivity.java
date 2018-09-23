@@ -1,6 +1,7 @@
 package smartcompass.teamdz.com.smartcompass2018.ui.maps;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,18 +9,23 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
@@ -29,24 +35,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
-
 import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseActivity;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
+
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
-import smartcompass.teamdz.com.smartcompass2018.utils.MapsUtils;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
 
-public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView {
+public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView, View.OnClickListener {
 
     private static final float DEFAULT_ZOOM = 15f;
     private DirectionImage mIvCompassMap;
     private ImageView mIvAround;
-
     private GoogleMap mMap;
     private UiSettings mUiSettings;
     private Marker mMarker;
@@ -57,10 +60,10 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     private float[] mAccelValues = new float[]{0f, 0f, 9.8f};
     private float[] mMagneticValues = new float[]{0.5f, 0f, 0f};
     private float mAzimuth;
-    private double mCurrentLat, mCurrentLong;
-    private LatLng mLatLng;
     private Location mLastKnownLocation;
-
+    private ImageView ivBackMap;
+    private EditText edtSearch;
+    private LatLng latCurrent;
 
     @Override
     protected MapsPresenter createPresenter() {
@@ -73,10 +76,18 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         Log.d("nghia", "onCreate");
         setContentView(R.layout.activity_maps);
 
-        mCompassSensorManager = new CompassSensorManager(this);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mIvAround = findViewById(R.id.iv_around_compass);
         mIvCompassMap = findViewById(R.id.iv_compass_map);
+        ivBackMap=findViewById(R.id.iv_back_map);
+        edtSearch=findViewById(R.id.edt_search_map);
+
+        ivBackMap.setOnClickListener(this);
+        edtSearch.setOnClickListener(this);
+
+
+
+        mCompassSensorManager = new CompassSensorManager(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -236,6 +247,44 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_back_map:
+                finish();
+                return;
+            case R.id.edt_search_map:
+                 findPlace();
+                return;
+
+        }
+    }
+    public void findPlace() {
+        try {
+            startActivityForResult(new PlaceAutocomplete.IntentBuilder(2).build(this), 1);
+        } catch (GooglePlayServicesRepairableException e) {
+        } catch (GooglePlayServicesNotAvailableException e2) {
+        }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != 1) {
+            return;
+        }
+        if (resultCode == -1) {
+            this.mMap.clear();
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            LatLng latNeed = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+            this.edtSearch.setText(place.getName());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latNeed, 15.0f);
+            this.mMap.addMarker(new MarkerOptions().title(place.getName() + "").snippet(place.getAddress() + "").position(latNeed));
+            this.mMap.animateCamera(cameraUpdate);
+            //route(this.latCurrent, latNeed);
+        } else if (resultCode == 2) {
+            Log.e("Tag", PlaceAutocomplete.getStatus(this, data).getStatusMessage());
+        } else if (resultCode != 0) {
+        }
     }
 
 }
