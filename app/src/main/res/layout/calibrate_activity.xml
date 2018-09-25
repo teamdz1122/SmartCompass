@@ -32,11 +32,11 @@
                 android:textSize="@dimen/text_longitude_and_latitude_h4" />
             <TextView
                 android:id="@+id/tv_magnetic_value"
-                android:layout_marginLeft="@dimen/margin_layout"
+                android:layout_marginStart="@dimen/margin_layout"
                 android:layout_width="match_parent"
                 android:textColor="@color/colorPrimaryWhite"
                 android:layout_height="wrap_content"
-                android:text="Low"
+                android:text="@string/calibrate_low"
                 android:textSize="@dimen/text_longitude_and_latitude_h4" />
         </LinearLayout>
 

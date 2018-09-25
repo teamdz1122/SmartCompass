@@ -10,4 +10,5 @@ public interface CompassView {
     void needToCalibrateCompass(int calibrate);
 
     void showWarning();
+    void showAddress();
 }

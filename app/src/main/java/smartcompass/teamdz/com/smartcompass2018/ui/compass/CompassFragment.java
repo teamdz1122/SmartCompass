@@ -38,6 +38,7 @@ import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseFragment;
 import smartcompass.teamdz.com.smartcompass2018.service.location.CompassLocationService;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
+import smartcompass.teamdz.com.smartcompass2018.ui.address.AddressActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.settings.SettingActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.calibrate.CalibrateActivity;
 import smartcompass.teamdz.com.smartcompass2018.ui.maps.MapsActivity;
@@ -54,7 +55,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
     private TextView mTvLat, mTvLon, mTvCity, mTvDegreesDirection;
-    private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning;
+    private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning,mIvAddress;
     private Typeface mTypeface;
     private int mCalibareMagnetic = 0;
     private float mMagnetic;
@@ -111,10 +112,13 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
         mIvSettings = view.findViewById(R.id.iv_settings);
         mIvStarRate = view.findViewById(R.id.iv_star_rate);
         mIvWarning = view.findViewById(R.id.iv_warning);
+        mIvAddress = view.findViewById(R.id.iv_address);
+
         mIvMaps.setOnClickListener(this);
         mIvSettings.setOnClickListener(this);
         mIvStarRate.setOnClickListener(this);
         mIvWarning.setOnClickListener(this);
+        mIvAddress.setOnClickListener(this);
 
         mDirectionImage = view.findViewById(R.id.iv_compass);
         mTvLat = view.findViewById(R.id.tv_latitude);
@@ -330,12 +334,27 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             case R.id.iv_warning:
                 mPresenter.openWarning();
                 break;
+            case R.id.iv_address:
+                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
+                    @Override
+                    public void onAdClosed() {
+                        mPresenter.openAddress();
+                    }
+                });
+                break;
+
         }
     }
 
     @Override
     public void showViewMaps() {
         Intent intent = new Intent(getActivity(), MapsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showAddress() {
+        Intent intent = new Intent(getActivity(), AddressActivity.class);
         startActivity(intent);
     }
 

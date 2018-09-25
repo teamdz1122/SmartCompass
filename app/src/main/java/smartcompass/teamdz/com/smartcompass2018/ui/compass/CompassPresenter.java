@@ -29,4 +29,7 @@ public class CompassPresenter extends BasePresenter<CompassView> {
     public void openWarning() {
         mView.showWarning();
     }
+    public void openAddress() {
+        mView.showAddress();
+    }
 }

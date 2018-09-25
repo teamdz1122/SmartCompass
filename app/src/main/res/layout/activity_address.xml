@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <LinearLayout
+        android:id="@+id/ll_info_line"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/ads_banner_address"
+        android:layout_margin="@dimen/margin_layout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/address_tv_address"
+            android:textColor="#fff5f5f5"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_info_tv_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="18.0sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/address_latitude"
+            android:textColor="#fff5f5f5"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_latitude"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="18.0sp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/address_longitude"
+            android:textColor="#fff5f5f5"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@+id/tv_longitude"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="18.0sp" />
+
+        <TextView
+            android:id="@+id/tv_networks_gps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/address_networks_gps_20_m"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+
+        <fragment
+            android:id="@+id/address_map_view"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+
+    <com.google.android.gms.ads.NativeExpressAdView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ads_banner_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:adSize="SMART_BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+</RelativeLayout>

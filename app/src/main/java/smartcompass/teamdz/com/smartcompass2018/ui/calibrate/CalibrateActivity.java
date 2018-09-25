@@ -58,7 +58,7 @@ public class CalibrateActivity extends BaseActivity<CalibratePresenter> implemen
 
     private void setTextForMagnetic(int magnetic) {
         if (magnetic == 1) {
-            mTvMagnetic.setText(R.string.calibrate_low);
+            mTvMagnetic.setText(R.string.calibrate_magnetic);
             mTvMagnetic.setTextColor(ContextCompat.getColor(this, R.color.color_calibrate_low));
         } else if (magnetic == 2) {
             mTvMagnetic.setText(R.string.calibrate_medium);

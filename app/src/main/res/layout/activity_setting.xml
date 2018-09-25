@@ -65,7 +65,7 @@
             android:layout_height="40dp"
             android:gravity="center_vertical"
             android:text="@string/rate_us"
-            android:layout_marginLeft="33dp"
+            android:layout_marginStart="33dp"
             android:textColor="@color/color_text_compass"
             android:textSize="16sp"/>
     </LinearLayout>
@@ -90,7 +90,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:text="@string/share"
-                android:layout_marginLeft="33dp"
+                android:layout_marginStart="33dp"
                 android:textColor="@color/color_text_compass"
                 android:textSize="16sp"/>
         </LinearLayout>
