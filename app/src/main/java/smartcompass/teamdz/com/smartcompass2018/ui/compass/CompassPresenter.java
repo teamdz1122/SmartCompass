@@ -32,4 +32,8 @@ public class CompassPresenter extends BasePresenter<CompassView> {
     public void openAddress() {
         mView.showAddress();
     }
+
+    public void showLocationIcon() {
+        mView.showLocationIcon();
+    }
 }

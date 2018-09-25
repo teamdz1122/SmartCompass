@@ -17,7 +17,9 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:layout_above="@+id/ads_banner_address"
-        android:layout_margin="@dimen/margin_layout"
+        android:layout_marginRight="@dimen/margin_layout"
+        android:layout_marginLeft="@dimen/margin_layout"
+        android:layout_marginTop="@dimen/margin_layout"
         android:orientation="vertical">
 
         <TextView
@@ -31,7 +33,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_info_tv_location"
+            android:id="@+id/tv_info_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
@@ -98,7 +100,8 @@
 
     </LinearLayout>
 
-    <com.google.android.gms.ads.NativeExpressAdView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.google.android.gms.ads.NativeExpressAdView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ads_banner_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

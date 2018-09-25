@@ -16,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="@dimen/margin_top_image_direction"
         android:src="@mipmap/compass_white"
-        app:layout_constraintBottom_toTopOf="@+id/tv_location_city"
+        app:layout_constraintBottom_toTopOf="@+id/iv_address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_degrees_direction" />
@@ -130,14 +130,16 @@
         android:id="@+id/iv_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_bottom_image_star_warning"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/background_click_button"
         android:padding="10dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/iv_warning"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_compass"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_location_address" />
 
     <ImageButton

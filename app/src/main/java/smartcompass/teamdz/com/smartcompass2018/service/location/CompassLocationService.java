@@ -64,7 +64,7 @@ public class CompassLocationService extends IntentService {
                     Log.e(TAG, errorMessage);
                 }
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage,errorMessage);
         } else {
             Address address = addresses.get(0);
             //ArrayList<String> addressFragments = new ArrayList<String>();
@@ -73,30 +73,43 @@ public class CompassLocationService extends IntentService {
                 addressFragments.add(address.getAddressLine(i));
             }*/
             String addressStr = "";
+            String addressFull = "";
             String locality = address.getLocality();
             String area = address.getAdminArea();
             String countryName = address.getCountryName();
             String featureName = address.getFeatureName();
+            String thoroughfare = address.getThoroughfare();
+            String subArea = address.getSubAdminArea();
             Log.i(TAG, getString(R.string.address_found));
             if (featureName != null) {
-                addressStr = featureName;
+                addressFull += " " +featureName;
             }
-            if (countryName != null) {
-                addressStr = countryName;
-            }
-            if (area != null) {
-                addressStr = area;
+            if (thoroughfare != null) {
+                addressStr = thoroughfare;
+                addressFull += " " +thoroughfare;
             }
             if (locality != null) {
                 addressStr = locality;
+                addressFull += " " +locality;
             }
-            deliverResultToReceiver(Constants.SUCCESS_RESULT, addressStr);
+            if (subArea != null) {
+                addressFull += " " +subArea;
+            }
+            if (area != null) {
+                addressFull += " " +area;
+            }
+            if (countryName != null) {
+                addressFull += " " +countryName;
+            }
+            Log.d("nghia",addressFull );
+            deliverResultToReceiver(Constants.SUCCESS_RESULT, addressStr, addressFull);
         }
     }
 
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, String address, String addressFull) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
+        bundle.putString(Constants.RESULT_DATA_KEY_ADDRESS, address);
+        bundle.putString(Constants.RESULT_DATA_KEY_ADDRESS_FULL, addressFull);
         mReceiver.send(resultCode, bundle);
     }
 }

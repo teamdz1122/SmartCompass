@@ -55,7 +55,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     private CompassSensorManager mCompassSensorManager;
     private DirectionImage mDirectionImage;
     private TextView mTvLat, mTvLon, mTvCity, mTvDegreesDirection;
-    private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning,mIvAddress;
+    private ImageView mIvMaps, mIvSettings, mIvStarRate, mIvWarning, mIvAddress;
     private Typeface mTypeface;
     private int mCalibareMagnetic = 0;
     private float mMagnetic;
@@ -69,6 +69,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     private LocationCallback mLocationCallback;
     private AddressResultReceiver mResultReceiver;
     private String mAddressOutput;
+    private String mAddressFull;
 
     private NativeExpressAdView mContainerAd;
 
@@ -355,7 +356,14 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     @Override
     public void showAddress() {
         Intent intent = new Intent(getActivity(), AddressActivity.class);
+        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
+        intent.putExtra(Constants.LOCATION_DATA_STRING_EXTRA, mAddressFull);
         startActivity(intent);
+    }
+
+    @Override
+    public void showLocationIcon() {
+        mIvAddress.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -385,11 +393,18 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             if (resultData == null) {
                 return;
             }
-            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
+            mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY_ADDRESS);
+            mAddressFull = resultData.getString(Constants.RESULT_DATA_KEY_ADDRESS_FULL);
             if (mAddressOutput == null) {
                 mAddressOutput = "";
             }
+            if (mAddressFull==null){
+                mAddressFull = "";
+            }
             displayAddressOutput(mAddressOutput);
+            if (!mAddressOutput.isEmpty() || mAddressOutput.length() > 0) {
+                mPresenter.showLocationIcon();
+            }
         }
     }
 

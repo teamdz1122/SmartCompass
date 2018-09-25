@@ -11,4 +11,6 @@ public interface CompassView {
 
     void showWarning();
     void showAddress();
+
+    void showLocationIcon();
 }

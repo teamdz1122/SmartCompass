@@ -84,8 +84,6 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         ivBackMap.setOnClickListener(this);
         edtSearch.setOnClickListener(this);
 
-
-
         mCompassSensorManager = new CompassSensorManager(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -195,7 +193,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             if (mMarker != null) {
                 mMarker.setRotation(mAzimuth);
             }
-            mPresenter.rotateCamera(mAzimuth);
+            //mPresenter.rotateCamera(mAzimuth);
             mIvCompassMap.setDegress(-mAzimuth);
             mIvCompassMap.invalidate();
         }
