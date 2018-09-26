@@ -27,9 +27,11 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 
 import smartcompass.teamdz.com.smartcompass2018.R;
+import smartcompass.teamdz.com.smartcompass2018.base.BaseActivity;
+import smartcompass.teamdz.com.smartcompass2018.base.BasePresenter;
 import smartcompass.teamdz.com.smartcompass2018.utils.InterstitialUtils;
 
-public class CompassActivity extends AppCompatActivity {
+public class CompassActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_PERMISSION = 200;
     private String[] PERMISSION_NAME = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -37,51 +39,21 @@ public class CompassActivity extends AppCompatActivity {
 
 
     @Override
+    protected BasePresenter createPresenter() {
+        return null;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass_layout);
 
-        hideStatusAndNavigationBar();
-        uiChangeListener();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission();
         } else {
             initView();
         }
-    }
-
-    public void uiChangeListener() {
-        final View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    hideStatusAndNavigationBar();
-                }
-            }
-        });
-    }
-
-    private void hideStatusAndNavigationBar() {
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                | View.SYSTEM_UI_FLAG_FULLSCREEN;
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE;
-        }
-        decorView.setSystemUiVisibility(uiOptions);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void initView() {

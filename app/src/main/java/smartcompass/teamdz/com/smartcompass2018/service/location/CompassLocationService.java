@@ -67,11 +67,6 @@ public class CompassLocationService extends IntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage,errorMessage);
         } else {
             Address address = addresses.get(0);
-            //ArrayList<String> addressFragments = new ArrayList<String>();
-            /*for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                Log.d("nghia","a = " + address.getAddressLine(i));
-                addressFragments.add(address.getAddressLine(i));
-            }*/
             String addressStr = "";
             String addressFull = "";
             String locality = address.getLocality();
@@ -89,10 +84,15 @@ public class CompassLocationService extends IntentService {
                 addressFull += " " +thoroughfare;
             }
             if (locality != null) {
-                addressStr = locality;
+                if (addressStr.length()==0) {
+                    addressStr = locality;
+                }
                 addressFull += " " +locality;
             }
             if (subArea != null) {
+                if (addressStr.length()==0) {
+                    addressStr = locality;
+                }
                 addressFull += " " +subArea;
             }
             if (area != null) {
