@@ -91,7 +91,7 @@ public class CompassLocationService extends IntentService {
             }
             if (subArea != null) {
                 if (addressStr.length()==0) {
-                    addressStr = locality;
+                    addressStr = subArea;
                 }
                 addressFull += " " +subArea;
             }
