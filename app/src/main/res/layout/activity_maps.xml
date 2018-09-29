@@ -1,4 +1,5 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,66 +11,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="60dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/iv_back_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
-
-            android:scaleType="centerCrop"
-            android:src="@drawable/iv_back"
-            tools:ignore="RtlHardcoded" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_text_view"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:padding="7dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/location"
-                tools:ignore="RtlHardcoded" />
-
-            <EditText
-                android:id="@+id/edt_search_map"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:background="@drawable/bg_tv_search"
-                android:hint="@string/map_enter_your_destination"
-                android:textSize="16sp"
-                tools:ignore="RtlHardcoded" />
-        </LinearLayout>
-    </LinearLayout>
-
     <smartcompass.teamdz.com.smartcompass2018.view.LineView
         android:id="@+id/line_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="330dp"
         android:layout_height="330dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_around_compass"
@@ -84,4 +49,102 @@
             android:layout_gravity="center"
             android:src="@mipmap/compass_map" />
     </FrameLayout>
-</FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/ib_my_location"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_back_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_arrow_back"
+            tools:ignore="RtlHardcoded" />
+
+        <RelativeLayout
+            android:id="@+id/relLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="8dp"
+            android:background="@drawable/white_border"
+            android:elevation="10dp">
+
+            <ImageView
+                android:id="@+id/ic_magnify"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                app:srcCompat="@drawable/ic_search" />
+
+            <EditText
+                android:id="@+id/edt_search_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ic_magnify"
+                android:background="@null"
+                android:hint="Search here"
+                android:imeOptions="actionSearch"
+                android:textColor="#000"
+                android:textSize="@dimen/text_longitude_and_latitude_h4" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_my_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_click_on_map"
+        android:elevation="2dp"
+        android:stateListAnimator="@null"
+        android:translationZ="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_my_location" />
+
+    <ImageButton
+        android:id="@+id/ib_rotate_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_click_on_map"
+        android:elevation="2dp"
+        android:stateListAnimator="@null"
+        android:translationZ="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/ib_my_location"
+        app:layout_constraintTop_toBottomOf="@+id/ib_my_location"
+        app:srcCompat="@drawable/ic_auto_rotate_on" />
+
+    <ImageButton
+        android:id="@+id/ib_compass_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_click_on_map"
+        android:elevation="2dp"
+        android:stateListAnimator="@null"
+        android:translationZ="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/ib_rotate_map"
+        app:layout_constraintTop_toBottomOf="@+id/ib_rotate_map"
+        app:srcCompat="@drawable/ic_compass_map_on" />
+
+</android.support.constraint.ConstraintLayout>

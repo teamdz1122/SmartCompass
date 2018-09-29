@@ -9,9 +9,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -38,12 +41,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
+
 import smartcompass.teamdz.com.smartcompass2018.R;
 import smartcompass.teamdz.com.smartcompass2018.base.BaseActivity;
 import smartcompass.teamdz.com.smartcompass2018.data.sensor.CompassSensorManager;
 
 import smartcompass.teamdz.com.smartcompass2018.utils.CompassUtils;
 import smartcompass.teamdz.com.smartcompass2018.view.DirectionImage;
+import smartcompass.teamdz.com.smartcompass2018.view.LineView;
 
 public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapReadyCallback, SensorEventListener, GoogleMap.OnMyLocationButtonClickListener, MapsView, View.OnClickListener {
 
@@ -62,8 +67,12 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
     private float mAzimuth;
     private Location mLastKnownLocation;
     private ImageView ivBackMap;
+    private ImageButton mIbMyLocation, mIbRotateMap, mIbCompassMap;
+    private FrameLayout mLayoutCompass;
     private EditText edtSearch;
-    private LatLng latCurrent;
+    private LineView mLineView;
+
+    private boolean mIsTurnOnRotate, mIsTurnOnCompass;
 
     @Override
     protected MapsPresenter createPresenter() {
@@ -76,13 +85,23 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         Log.d("nghia", "onCreate");
         setContentView(R.layout.activity_maps);
 
+        init();
+
         mIvAround = findViewById(R.id.iv_around_compass);
+        mLayoutCompass = findViewById(R.id.frameLayout);
         mIvCompassMap = findViewById(R.id.iv_compass_map);
-        ivBackMap=findViewById(R.id.iv_back_map);
-        edtSearch=findViewById(R.id.edt_search_map);
+        ivBackMap = findViewById(R.id.iv_back_map);
+        edtSearch = findViewById(R.id.edt_search_map);
+        mIbRotateMap = findViewById(R.id.ib_rotate_map);
+        mIbMyLocation = findViewById(R.id.ib_my_location);
+        mIbCompassMap = findViewById(R.id.ib_compass_map);
+        mLineView = findViewById(R.id.line_view);
 
         ivBackMap.setOnClickListener(this);
         edtSearch.setOnClickListener(this);
+        mIbRotateMap.setOnClickListener(this);
+        mIbMyLocation.setOnClickListener(this);
+        mIbCompassMap.setOnClickListener(this);
 
         mCompassSensorManager = new CompassSensorManager(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -90,21 +109,10 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mapFragment.getMapAsync(this);
     }
 
-   /*@SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            mCurrentLat = location.getLatitude();
-                            mCurrentLong = location.getLongitude();
-                        } else {
-                            Log.d("nghia", "null");
-                        }
-                    }
-                });
-    }*/
+    private void init() {
+        mIsTurnOnRotate = true;
+        mIsTurnOnCompass = true;
+    }
 
     private void createLocationRequest() {
         mLocationRequest = LocationRequest.create();
@@ -123,9 +131,6 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mUiSettings.setCompassEnabled(false);
         mUiSettings.setRotateGesturesEnabled(false);
         mUiSettings.setZoomControlsEnabled(true);
-        mUiSettings.setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationButtonClickListener(this);
         getDeviceLocation();
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
     }
@@ -139,7 +144,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
             }
 
             List<Location> locationList = locationResult.getLocations();
-            Log.d("nghia","mLocationCallback()");
+            Log.d("nghia", "mLocationCallback()");
             for (Location location : locationList) {
                 mLastKnownLocation = location;
                 if (mMarker != null) {
@@ -148,12 +153,12 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location));
                 markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
-                markerOptions.anchor(0.5f, 2.0f);
+                markerOptions.anchor(0.5f, 0.5f);
                 markerOptions.flat(true);
                 mMarker = mMap.addMarker(markerOptions);
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                        location.getLongitude()),DEFAULT_ZOOM));
+                /*mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                        location.getLongitude()), DEFAULT_ZOOM));*/
             }
         }
 
@@ -188,15 +193,22 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
 
         mCompassSensorManager.updateAzimuth();
         float newAzimuth = mCompassSensorManager.getAzimuth();
-        if (mAzimuth != newAzimuth) {
-            mAzimuth = newAzimuth;
-            if (mMarker != null) {
-                mMarker.setRotation(mAzimuth);
+            if (mAzimuth != newAzimuth) {
+                mAzimuth = newAzimuth;
+                if (mMarker != null) {
+                    mMarker.setRotation(mAzimuth);
+                }
+                if (mIsTurnOnRotate) {
+                    if (mIsTurnOnCompass) {
+                        mIvCompassMap.setDegress(-mAzimuth);
+                    }
+                    mPresenter.rotateCamera(mAzimuth);
+                } else {
+                    mIvCompassMap.setDegress(0);
+                }
+                mIvCompassMap.invalidate();
             }
-            //mPresenter.rotateCamera(mAzimuth);
-            mIvCompassMap.setDegress(-mAzimuth);
-            mIvCompassMap.invalidate();
-        }
+
     }
 
     @Override
@@ -204,7 +216,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         if (mMap == null || mLastKnownLocation == null) {
             return;
         }
-        Log.d("nghia","rotateCamera()");
+        Log.d("nghia", "rotateCamera()");
         CameraPosition oldPos = mMap.getCameraPosition();
         CameraPosition pos = CameraPosition.builder(oldPos).target(new LatLng(mLastKnownLocation.getLatitude(),
                 mLastKnownLocation.getLongitude()))
@@ -226,9 +238,10 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         }
         return false;
     }
+
     @SuppressLint("MissingPermission")
     public void getDeviceLocation() {
-        Log.d("nghia","getDeviceLocation()");
+        Log.d("nghia", "getDeviceLocation()");
         Task<Location> locationResult = mFusedLocationClient.getLastLocation();
         locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
             @Override
@@ -249,16 +262,59 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_back_map:
                 finish();
-                return;
+                break;
             case R.id.edt_search_map:
-                 findPlace();
-                return;
+                findPlace();
+                break;
+            case R.id.ib_rotate_map:
+                if (mIsTurnOnRotate) {
+                    turnOffRotateMapAndCompass();
+                } else {
+                    turnOnRotateMapAndCompass();
+                }
+                break;
+            case R.id.ib_my_location:
+                getDeviceLocation();
+                break;
+            case R.id.ib_compass_map:
+                if (mIsTurnOnCompass) {
+                    turnOffCompass();
+                } else {
+                    turnOnCompass();
+                }
+                break;
 
         }
     }
+
+    private void turnOffCompass() {
+        mIsTurnOnCompass = false;
+        mLayoutCompass.setVisibility(View.INVISIBLE);
+        mLineView.setVisibility(View.INVISIBLE);
+        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_compass_map_off));
+    }
+
+    private void turnOnCompass() {
+        mIsTurnOnCompass = true;
+        mLayoutCompass.setVisibility(View.VISIBLE);
+        mLineView.setVisibility(View.VISIBLE);
+        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_compass_map_on));
+    }
+
+    private void turnOnRotateMapAndCompass() {
+        mIsTurnOnRotate = true;
+        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_auto_rotate_on));
+    }
+
+    private void turnOffRotateMapAndCompass() {
+        mIsTurnOnRotate = false;
+        mPresenter.rotateCamera(0);
+        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_auto_rotate_off));
+    }
+
     public void findPlace() {
         try {
             startActivityForResult(new PlaceAutocomplete.IntentBuilder(2).build(this), 1);
@@ -266,6 +322,7 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         } catch (GooglePlayServicesNotAvailableException e2) {
         }
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode != 1) {
             return;

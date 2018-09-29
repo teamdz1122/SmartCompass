@@ -102,9 +102,8 @@ public class CalibrateActivity extends BaseActivity<CalibratePresenter> implemen
     public void addIconInText(String warningStr) {
         SpannableString spanStr = new SpannableString(warningStr);
         int index = spanStr.toString().indexOf("@");
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_warning_gray);
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_warning_yellow);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.setColorFilter(new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY));
         ImageSpan imageSpan = new ImageSpan(drawable);
         spanStr.setSpan(imageSpan, index, index+1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         mTVDecriptionWarning.setText(spanStr);

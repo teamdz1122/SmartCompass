@@ -11,4 +11,6 @@
     <color name="color_calibrate_low">#ec4a25</color>
     <color name="color_calibrate_medium">#e2bc23</color>
     <color name="ic_launcher_background">#CF4A21</color>
+    <color name="background_icon_on_map">#ffffff</color>
+    <color name="background_icon_on_map_focus">#bebcbc</color>
 </resources>

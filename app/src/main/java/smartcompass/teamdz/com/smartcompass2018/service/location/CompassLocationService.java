@@ -64,7 +64,7 @@ public class CompassLocationService extends IntentService {
                     Log.e(TAG, errorMessage);
                 }
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage,errorMessage);
+            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage, errorMessage);
         } else {
             Address address = addresses.get(0);
             String addressStr = "";
@@ -77,31 +77,31 @@ public class CompassLocationService extends IntentService {
             String subArea = address.getSubAdminArea();
             Log.i(TAG, getString(R.string.address_found));
             if (featureName != null) {
-                addressFull += " " +featureName;
+                addressFull += " " + featureName;
             }
             if (thoroughfare != null) {
                 addressStr = thoroughfare;
-                addressFull += " " +thoroughfare;
+                addressFull += " " + thoroughfare;
             }
             if (locality != null) {
-                if (addressStr.length()==0) {
+                if (addressStr.length() == 0) {
                     addressStr = locality;
                 }
-                addressFull += " " +locality;
+                addressFull += " " + locality;
             }
             if (subArea != null) {
-                if (addressStr.length()==0) {
+                if (addressStr.length() == 0) {
                     addressStr = subArea;
                 }
-                addressFull += " " +subArea;
+                addressFull += " " + subArea;
             }
             if (area != null) {
-                addressFull += " " +area;
+                addressFull += " " + area;
             }
             if (countryName != null) {
-                addressFull += " " +countryName;
+                addressFull += " " + countryName;
             }
-            Log.d("nghia",addressFull );
+            Log.d("nghia", addressFull + " a "+ address.getSubThoroughfare() + " b "+ address.getSubLocality() + " c "+address.getPremises());
             deliverResultToReceiver(Constants.SUCCESS_RESULT, addressStr, addressFull);
         }
     }
