@@ -105,7 +105,7 @@ public class CalibrateActivity extends BaseActivity<CalibratePresenter> implemen
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_warning_yellow);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
         ImageSpan imageSpan = new ImageSpan(drawable);
-        spanStr.setSpan(imageSpan, index, index+1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        spanStr.setSpan(imageSpan, index, index + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         mTVDecriptionWarning.setText(spanStr);
     }
 }

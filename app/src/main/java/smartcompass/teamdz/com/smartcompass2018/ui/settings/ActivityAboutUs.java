@@ -23,6 +23,7 @@ public class ActivityAboutUs extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.about_us);
 
     }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

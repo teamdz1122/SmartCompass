@@ -24,7 +24,7 @@ public class RateAppDialog extends DialogFragment {
     private static final String LAUNCHES = "LAUNCHES";
     private static final String DISABLED = "DISABLED";
 
-    public static void showDialog(Context context,FragmentManager fragmentManager) {
+    public static void showDialog(Context context, FragmentManager fragmentManager) {
         boolean shouldShow = false;
         SharedPreferences sharedPreferences = getSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -46,7 +46,7 @@ public class RateAppDialog extends DialogFragment {
             editor.putInt(LAUNCHES, 0)
                     .putLong(LAST_PROMPT, System.currentTimeMillis()).commit();
             new RateAppDialog().show(fragmentManager, null);
-        }else {
+        } else {
             editor.commit();
         }
     }

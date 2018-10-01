@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -193,21 +194,21 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
 
         mCompassSensorManager.updateAzimuth();
         float newAzimuth = mCompassSensorManager.getAzimuth();
-            if (mAzimuth != newAzimuth) {
-                mAzimuth = newAzimuth;
-                if (mMarker != null) {
-                    mMarker.setRotation(mAzimuth);
-                }
-                if (mIsTurnOnRotate) {
-                    if (mIsTurnOnCompass) {
-                        mIvCompassMap.setDegress(-mAzimuth);
-                    }
-                    mPresenter.rotateCamera(mAzimuth);
-                } else {
-                    mIvCompassMap.setDegress(0);
-                }
-                mIvCompassMap.invalidate();
+        if (mAzimuth != newAzimuth) {
+            mAzimuth = newAzimuth;
+            if (mMarker != null) {
+                mMarker.setRotation(mAzimuth);
             }
+            if (mIsTurnOnRotate) {
+                if (mIsTurnOnCompass) {
+                    mIvCompassMap.setDegress(-mAzimuth);
+                }
+                mPresenter.rotateCamera(mAzimuth);
+            } else {
+                mIvCompassMap.setDegress(0);
+            }
+            mIvCompassMap.invalidate();
+        }
 
     }
 
@@ -294,25 +295,27 @@ public class MapsActivity extends BaseActivity<MapsPresenter> implements OnMapRe
         mIsTurnOnCompass = false;
         mLayoutCompass.setVisibility(View.INVISIBLE);
         mLineView.setVisibility(View.INVISIBLE);
-        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_compass_map_off));
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_compass_map_off));
     }
 
     private void turnOnCompass() {
         mIsTurnOnCompass = true;
         mLayoutCompass.setVisibility(View.VISIBLE);
         mLineView.setVisibility(View.VISIBLE);
-        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_compass_map_on));
+        mIbCompassMap.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_compass_map_on));
     }
 
     private void turnOnRotateMapAndCompass() {
         mIsTurnOnRotate = true;
-        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_auto_rotate_on));
+        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_auto_rotate_on));
     }
 
     private void turnOffRotateMapAndCompass() {
         mIsTurnOnRotate = false;
         mPresenter.rotateCamera(0);
-        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_auto_rotate_off));
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        mIbRotateMap.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_auto_rotate_off));
     }
 
     public void findPlace() {

@@ -8,29 +8,29 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
 public class InterstitialUtils {
-    private final String APP_ID="ca-app-pub-3940256099942544~334751171";
-    private final String INTERSTITIAL_AD_UNIT="ca-app-pub-3940256099942544/1033173712";
+    private final String APP_ID = "ca-app-pub-3940256099942544~334751171";
+    private final String INTERSTITIAL_AD_UNIT = "ca-app-pub-3940256099942544/1033173712";
     private InterstitialAd interstitialAd;
     private static InterstitialUtils sharedInstance;
     private AdCloseListener adCloseListener;
     private boolean isReloaded = false;
 
-    public static InterstitialUtils getSharedInstance(){
-        if (sharedInstance==null){
-            sharedInstance=new InterstitialUtils();
+    public static InterstitialUtils getSharedInstance() {
+        if (sharedInstance == null) {
+            sharedInstance = new InterstitialUtils();
         }
         return sharedInstance;
     }
 
-    public void init(Context context){
-        MobileAds.initialize(context,APP_ID);
-        interstitialAd=new InterstitialAd(context);
+    public void init(Context context) {
+        MobileAds.initialize(context, APP_ID);
+        interstitialAd = new InterstitialAd(context);
         interstitialAd.setAdUnitId(INTERSTITIAL_AD_UNIT);
-        interstitialAd.setAdListener(new AdListener(){
+        interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                if(adCloseListener!=null){
+                if (adCloseListener != null) {
                     adCloseListener.onAdClosed();
                 }
                 loadInterstitialAd();
@@ -39,8 +39,8 @@ public class InterstitialUtils {
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
-                if (isReloaded==false){
-                    isReloaded=true;
+                if (isReloaded == false) {
+                    isReloaded = true;
                     loadInterstitialAd();
                 }
             }
@@ -49,29 +49,30 @@ public class InterstitialUtils {
     }
 
     private void loadInterstitialAd() {
-        if (interstitialAd!=null&&!interstitialAd.isLoading()&&!interstitialAd.isLoaded()){
+        if (interstitialAd != null && !interstitialAd.isLoading() && !interstitialAd.isLoaded()) {
             AdRequest adRequest = new AdRequest.Builder().build();
             interstitialAd.loadAd(adRequest);
         }
     }
-    public interface AdCloseListener{
+
+    public interface AdCloseListener {
         void onAdClosed();
     }
 
-    public void  showInterstitialAd(AdCloseListener adCloseListener){
+    public void showInterstitialAd(AdCloseListener adCloseListener) {
         if (canShowInterstitialAd()) {
-            isReloaded=false;
-            this.adCloseListener=adCloseListener;
+            isReloaded = false;
+            this.adCloseListener = adCloseListener;
             interstitialAd.show();
 
-        }else {
+        } else {
             loadInterstitialAd();
             adCloseListener.onAdClosed();
         }
     }
 
     private boolean canShowInterstitialAd() {
-        return interstitialAd!=null&&interstitialAd.isLoaded();
+        return interstitialAd != null && interstitialAd.isLoaded();
     }
 }
 

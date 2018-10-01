@@ -312,13 +312,15 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_settings:
-                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-                        Intent intent = new Intent(getActivity(), SettingActivity.class);
-                        startActivity(intent);
-                    }
-                });
+//                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
+//                    @Override
+//                    public void onAdClosed() {
+//                        Intent intent = new Intent(getActivity(), SettingActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
 
                 break;
             case R.id.iv_map:
@@ -336,12 +338,13 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
                 mPresenter.openWarning();
                 break;
             case R.id.iv_address:
-                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
-                    @Override
-                    public void onAdClosed() {
-                        mPresenter.openAddress();
-                    }
-                });
+//                InterstitialUtils.getSharedInstance().showInterstitialAd(new InterstitialUtils.AdCloseListener() {
+//                    @Override
+//                    public void onAdClosed() {
+//                        mPresenter.openAddress();
+//                    }
+//                });
+                mPresenter.openAddress();
                 break;
 
         }
@@ -398,7 +401,7 @@ public class CompassFragment extends BaseFragment<CompassPresenter> implements S
             if (mAddressOutput == null) {
                 mAddressOutput = "";
             }
-            if (mAddressFull==null){
+            if (mAddressFull == null) {
                 mAddressFull = "";
             }
             displayAddressOutput(mAddressOutput);

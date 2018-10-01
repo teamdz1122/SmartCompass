@@ -8,8 +8,9 @@ import android.view.Surface;
 
 public class CompassUtils {
     private static final float ALPHA = 0.1f;
+
     public static int getScreenOrientation(Context context) {
-        int rotation = ((Activity)context).getWindowManager().getDefaultDisplay()
+        int rotation = ((Activity) context).getWindowManager().getDefaultDisplay()
                 .getRotation();
         int orientation = context.getResources().getConfiguration().orientation;
 
@@ -45,7 +46,7 @@ public class CompassUtils {
         return output;
     }
 
-    public static String displayCurrentDirection(float azimuth){
+    public static String displayCurrentDirection(float azimuth) {
         String direct = "";
         if (azimuth <= 22.5 || azimuth >= 337.5) {
             direct += "N";
@@ -76,7 +77,7 @@ public class CompassUtils {
         double mod = coordinator % 1;
         coordinator = mod * 60;
         intPart = (int) coordinator;
-        if (Math.abs(intPart) <10) {
+        if (Math.abs(intPart) < 10) {
             minute = "0" + intPart;
         } else {
             minute = String.valueOf(intPart);
@@ -85,7 +86,7 @@ public class CompassUtils {
         mod = coordinator % 1;
         coordinator = mod * 60;
         intPart = (int) coordinator;
-        if (Math.abs(intPart) <10) {
+        if (Math.abs(intPart) < 10) {
             second = "0" + intPart;
         } else {
             second = String.valueOf(intPart);

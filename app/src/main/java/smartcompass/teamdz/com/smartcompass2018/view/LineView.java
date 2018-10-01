@@ -13,6 +13,7 @@ import android.view.View;
 public class LineView extends View {
 
     private float mWidth, mHeight;
+
     public LineView(Context context) {
         super(context);
     }
@@ -44,7 +45,7 @@ public class LineView extends View {
         Paint paint = new Paint();
         paint.setColor(Color.parseColor("#696969"));
         paint.setStrokeWidth(2.0f);
-        canvas.drawLine(mWidth/2, 0.0f, mWidth/2, mHeight, paint);
-        canvas.drawLine(0.0f, mHeight/2, mWidth, mHeight/2, paint);
+        canvas.drawLine(mWidth / 2, 0.0f, mWidth / 2, mHeight, paint);
+        canvas.drawLine(0.0f, mHeight / 2, mWidth, mHeight / 2, paint);
     }
 }

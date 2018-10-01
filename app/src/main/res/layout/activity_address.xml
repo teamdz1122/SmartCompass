@@ -14,11 +14,11 @@
     <LinearLayout
         android:id="@+id/ll_info_line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
-        android:layout_above="@+id/ads_banner_address"
-        android:layout_marginRight="@dimen/margin_layout"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="@dimen/margin_layout"
+        android:layout_marginRight="@dimen/margin_layout"
         android:layout_marginTop="@dimen/margin_layout"
         android:orientation="vertical">
 
@@ -29,26 +29,28 @@
             android:layout_marginStart="7dp"
             android:layout_marginTop="10dp"
             android:text="@string/address_tv_address"
-            android:textColor="#fff5f5f5"
-            android:textSize="16sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_info_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="5dp"
-            android:textColor="@android:color/white"
-            android:textSize="18.0sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="12dp"
             android:text="@string/address_latitude"
-            android:textColor="#fff5f5f5"
-            android:textSize="16sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_latitude"
@@ -56,8 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:layout_marginTop="5dp"
-            android:textColor="@android:color/white"
-            android:textSize="18.0sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -65,48 +67,51 @@
             android:layout_marginStart="7dp"
             android:layout_marginTop="12dp"
             android:text="@string/address_longitude"
-            android:textColor="#fff5f5f5"
-            android:textSize="16.0sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_longitude"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="5dp"
-            android:textColor="@android:color/white"
-            android:textSize="18.0sp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_networks_gps"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
             android:layout_marginTop="10dp"
             android:text="@string/address_networks_gps_20_m"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
-
-
-        <fragment
-            android:id="@+id/address_map_view"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp" />
+            android:textColor="@color/colorPrimaryWhite"
+            android:textSize="15sp"
+            android:textStyle="normal" />
 
     </LinearLayout>
 
-    <com.google.android.gms.ads.NativeExpressAdView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <fragment
+        android:id="@+id/address_map_view"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ads_banner_address"
+        android:layout_below="@+id/ll_info_line"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" />
+
+    <com.google.android.gms.ads.NativeExpressAdView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ads_banner_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
         app:adSize="SMART_BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 </RelativeLayout>

@@ -24,7 +24,7 @@ import smartcompass.teamdz.com.smartcompass2018.base.BaseActivity;
 import smartcompass.teamdz.com.smartcompass2018.base.BasePresenter;
 import smartcompass.teamdz.com.smartcompass2018.utils.Constants;
 
-public class AddressActivity extends BaseActivity<AddressPresenter> implements AddressView, OnMapReadyCallback{
+public class AddressActivity extends BaseActivity<AddressPresenter> implements AddressView, OnMapReadyCallback {
     private Toolbar mToolbar;
     private TextView mTvAddress, mTvLatitude, mTvLongitude;
     private GoogleMap mMap;
@@ -97,7 +97,7 @@ public class AddressActivity extends BaseActivity<AddressPresenter> implements A
         mUiSettings.setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLatitude,
-                mLongitude),DEFAULT_ZOOM));
+                mLongitude), DEFAULT_ZOOM));
     }
 
     private void adsUnit() {

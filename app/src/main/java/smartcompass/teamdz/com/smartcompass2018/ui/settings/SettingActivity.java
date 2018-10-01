@@ -38,7 +38,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         llAbout = findViewById(R.id.ll_about_us);
         llRate = findViewById(R.id.ll_rate_us);
-        llShare=findViewById(R.id.ll_share);
+        llShare = findViewById(R.id.ll_share);
         mContainerAd = findViewById(R.id.ads_banner_setting);
 
         llAbout.setOnClickListener(this);
@@ -53,7 +53,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     private void adsUnit() {
         final NativeExpressAdView mAdView = new NativeExpressAdView(this);
         final AdRequest request = new AdRequest.Builder().build();
-        mAdView.setAdSize(new AdSize(AdSize.FULL_WIDTH,350));
+        mAdView.setAdSize(new AdSize(AdSize.FULL_WIDTH, 350));
         mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
         mContainerAd.addView(mAdView);
         mAdView.loadAd(request);
@@ -119,7 +119,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Hey check out my app at: https://play.google.com/store/apps/details?id="+getApplication().getPackageName());
+                        "Hey check out my app at: https://play.google.com/store/apps/details?id=" + getApplication().getPackageName());
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
                 break;

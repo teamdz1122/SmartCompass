@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SmartCompass2018</string>
+    <string name="app_name">Compass</string>
     <string name="no_gps_no_network">Device hasn\'t gps and network</string>
     <string name="service_not_available">Service Not Available</string>
     <string name="invalid_lat_long_used">Invalid lat long used</string>
@@ -30,10 +30,9 @@
     <string name="address_latitude">Latitude :</string>
     <string name="address_longitude">Longitude :</string>
     <string name="address_networks_gps_20_m">NetWorks GPS ±20 m</string>
-    <string name="map_enter_your_destination">enter your destination</string>
     <string name="calibrate_low">Low</string>
     <string name="compass_my_location">My Location</string>
     <string name="compass_32_05">32.05</string>
     <string name="compass_21_03">21.03</string>
-    <string name="compass_direction_dn">DN</string>
+    <string name="compass_direction_dn">ES</string>
 </resources>

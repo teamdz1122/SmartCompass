@@ -101,7 +101,7 @@ public class CompassLocationService extends IntentService {
             if (countryName != null) {
                 addressFull += " " + countryName;
             }
-            Log.d("nghia", addressFull + " a "+ address.getSubThoroughfare() + " b "+ address.getSubLocality() + " c "+address.getPremises());
+            Log.d("nghia", addressFull + " a " + address.getSubThoroughfare() + " b " + address.getSubLocality() + " c " + address.getPremises());
             deliverResultToReceiver(Constants.SUCCESS_RESULT, addressStr, addressFull);
         }
     }
